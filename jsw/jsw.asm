@@ -9057,8 +9057,8 @@ FLYINGPIG0:
                           ; (ENTITY86)
   DEFB $57,$4E            ; Guardian no. 0x57 (vertical), base sprite 2, x=14
                           ; (ENTITY87)
-  DEFB $45,$D5            ; Arrow flying right to left at pixel y-coordinate
-                          ; 536 (ENTITY69)
+  DEFB $45,$52            ; Arrow flying right to left at pixel y-coordinate 41
+                          ; (ENTITY69)
   DEFB $3C,$92            ; Arrow flying left to right at pixel y-coordinate 73
                           ; (ENTITY60)
 
