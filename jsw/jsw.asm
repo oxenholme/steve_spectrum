@@ -207,18 +207,16 @@ ENTITIES:
 ; | Byte | Contents                                                 |
 ; +------+----------------------------------------------------------+
 ; | 0    | Bit 7: direction (0=left, 1=right)                       |
-; |      | Bits 3-6: unused                                         |
+; |      | Bit 6: Willy is on the rope (set), or not (reset)        |
+; |      | Bits 3-5: unused                                         |
 ; |      | Bits 0-2: entity type (011)                              |
 ; | 1    | Animation frame index                                    |
 ; | 2    | x-coordinate of the top of the rope                      |
 ; | 3    | x-coordinate of the segment of rope being drawn          |
 ; | 4    | Length (32)                                              |
 ; | 5    | Segment drawing byte                                     |
-; | 6    | Unused                                                   |
+; | 6    | Index of the segment of rope being drawn (0-31)          |
 ; | 7    | Animation frame at which the rope changes direction (54) |
-; | 9    | Index of the segment of rope being drawn (0-31)          |
-; | 11   | Bit 7: Willy is on the rope (set), or not (reset)        |
-; |      | Bits 0-6: unused                                         |
 ; +------+----------------------------------------------------------+
 ;
 ; Note that if a rope were the eighth entity specified in a room, its buffer
@@ -2614,7 +2612,7 @@ DRAWTHINGS_8:
 DRAWTHINGS_9:
   LD IY,SBUFADDRS         ; Point IY at the first byte of the screen buffer
                           ; address lookup table at SBUFADDRS
-  LD (IX+$09),$00         ; Initialise the second byte in the following entity
+  LD (IX+$06),$00         ; Initialise the seventh byte of the entity
                           ; definition to zero; this will count the segments of
                           ; rope to draw
   LD A,(IX+$02)           ; Initialise the fourth byte of the entity
@@ -2638,14 +2636,14 @@ DRAWTHINGS_10:
   AND (HL)                ; Is this segment of rope touching anything else
                           ; that's been drawn so far (e.g. Willy)?
   JR Z,DRAWTHINGS_13      ; Jump if not
-  LD A,(IX+$09)           ; Copy the segment counter into the rope status
+  LD A,(IX+$06)           ; Copy the segment counter into the rope status
   LD (ROPE),A             ; indicator at ROPE
-  SET 0,(IX+$0B)          ; Signal: Willy is on the rope
+  SET 6,(IX+$00)          ; Signal: Willy is on the rope
 DRAWTHINGS_11:
-  CP (IX+$09)             ; Does the rope status indicator at ROPE match the
+  CP (IX+$06)             ; Does the rope status indicator at ROPE match the
                           ; segment counter?
   JR NZ,DRAWTHINGS_13     ; Jump if not
-  BIT 0,(IX+$0B)          ; Is Willy on the rope (and clinging to this
+  BIT 6,(IX+$00)          ; Is Willy on the rope (and clinging to this
                           ; particular segment)?
   JR Z,DRAWTHINGS_13      ; Jump if not
   LD B,(IX+$03)           ; Copy the x-coordinate of the cell containing the
@@ -2681,7 +2679,7 @@ DRAWTHINGS_13:
   LD A,(IX+$05)           ; Draw a pixel of the rope to the screen buffer at
   OR (HL)                 ; 24576
   LD (HL),A
-  LD A,(IX+$09)           ; Point HL at the relevant entry in the second half
+  LD A,(IX+$06)           ; Point HL at the relevant entry in the second half
   ADD A,(IX+$01)          ; of the rope animation table at ROPEANIM
   LD L,A
   SET 7,L
@@ -2719,10 +2717,10 @@ DRAWTHINGS_17:
   DJNZ DRAWTHINGS_16      ; Jump back until the drawing byte has been rotated
                           ; as required
 DRAWTHINGS_18:
-  LD A,(IX+$09)           ; Pick up the segment counter
+  LD A,(IX+$06)           ; Pick up the segment counter
   CP (IX+$04)             ; Have we drawn every segment of the rope yet?
   JR Z,DRAWTHINGS_19      ; Jump if so
-  INC (IX+$09)            ; Increment the segment counter
+  INC (IX+$06)            ; Increment the segment counter
   JP DRAWTHINGS_10        ; Jump back to draw the next segment of rope
 ; Now that the entire rope has been drawn, deal with Willy's movement along it.
 DRAWTHINGS_19:
@@ -2732,10 +2730,10 @@ DRAWTHINGS_19:
   JR Z,DRAWTHINGS_20      ; Jump if not
   INC A                   ; Update the rope status indicator at ROPE
   LD (ROPE),A
-  RES 0,(IX+$0B)          ; Signal: Willy is not on the rope
+  RES 6,(IX+$00)          ; Signal: Willy is not on the rope
   JR DRAWTHINGS_22        ; Jump to consider the next entity definition
 DRAWTHINGS_20:
-  BIT 0,(IX+$0B)          ; Is Willy on the rope?
+  BIT 6,(IX+$00)          ; Is Willy on the rope?
   JR Z,DRAWTHINGS_22      ; If not, jump to consider the next entity definition
   LD A,(DMFLAGS)          ; Pick up Willy's direction and movement flags from
                           ; DMFLAGS
