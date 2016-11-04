@@ -429,10 +429,10 @@ ROPEANIM:
 ; After the game has loaded, this is where it all starts.
 BEGIN:
   DI                      ; Disable interrupts
-  LD HL,$5BFF             ; Place the address of the routine at ENTERCODES on
-  LD (HL),$86             ; the stack
+  LD HL,$5BFF             ; Place the address of the routine at TITLESCREEN on
+  LD (HL),TITLESCREEN/$100; the stack
   DEC HL
-  LD (HL),$9F
+  LD (HL),TITLESCREEN%$100
   LD SP,$5BFE
   SUB A                   ; Set HL=8500 in a roundabout way
   LD L,A
