@@ -24,8 +24,7 @@ ROOMNAME:
 ; Initialised upon entry to a room by the routine at STARTGAME.
 BACKGROUND:
   DEFS $09                ; Background tile (used by the routines at DRAWROOM,
-                          ; ROOMATTR, MOVEWILLY and WILLYATTR, and also by the
-                          ; unused routine at U_SETATTRS)
+                          ; ROOMATTR, MOVEWILLY and WILLYATTR
 FLOOR:
   DEFS $09                ; Floor tile (used by the routines at DRAWROOM and
                           ; ROOMATTR)
@@ -559,14 +558,6 @@ TICKS:
 LIVES:
   DEFB $00
 
-; Screen flash counter
-;
-; Initialised to zero by the routine at TITLESCREEN, but never used; the code
-; at SCRFLASH makes the screen flash in Manic Miner fashion if this address
-; holds a non-zero value.
-FLASH:
-  DEFB $00
-
 ; Kempston joystick indicator
 ;
 ; Initialised by the routine at TITLESCREEN, and checked by the routines at
@@ -801,8 +792,6 @@ TITLESCREEN:
                           ; JOYSTICK
   LD (NOTEINDEX),A        ; Initialise the in-game music note index at
                           ; NOTEINDEX
-  LD (FLASH),A            ; Initialise the (unused) screen flash counter at
-                          ; FLASH
   LD (AIRBORNE),A         ; Initialise the airborne status indicator at
                           ; AIRBORNE
   LD (TICKS),A            ; Initialise the minute counter at TICKS
@@ -1134,25 +1123,6 @@ MAINLOOP_0:
   LD (HL),A               ; head down it; this has the effect of moving Willy
                           ; at twice his normal speed as he makes his way to
                           ; the toilet (using animation frames 2 and 0)
-SCRFLASH:
-  LD A,(FLASH)            ; Pick up the screen flash counter (unused and always
-                          ; 0) from FLASH
-  OR A                    ; Is it zero?
-  JR Z,MAINLOOP_1         ; Jump if so (this jump is always made)
-; The next section of code is never executed.
-  DEC A                   ; Decrement the screen flash counter at FLASH
-  LD (FLASH),A
-  RLCA                    ; Move bits 0-2 into bits 3-5 and clear all the other
-  RLCA                    ; bits
-  RLCA
-  AND $38
-  LD HL,$5C00             ; Set every attribute byte in the buffer at 23552 to
-  LD DE,$5C01             ; this value
-  LD BC,$01FF
-  LD (HL),A
-  LDIR
-; Normal service resumes here.
-MAINLOOP_1:
   LD HL,$5C00             ; Copy the contents of the attribute buffer at 23552
   LD DE,$5800             ; to the attribute file
   LD BC,$0200
@@ -2810,35 +2780,6 @@ DRAWTHINGS_22:
   LD DE,$0008             ; Point IX at the first byte of the next entity
   ADD IX,DE               ; definition
   JP DRAWTHINGS_0         ; Jump back to deal with it
-
-; Unused routine
-;
-; This routine is not used, but if it were, it would set the INK colour for a
-; 3x2 block of cells, maintaining the PAPER, BRIGHT and FLASH attributes of the
-; current room background. It is identical to the code at 8E5F in Manic Miner
-; that is used to set the attributes for a vertical guardian.
-;
-; A INK colour (0-7)
-; HL Attribute buffer address
-U_SETATTRS:
-  LD (HL),A               ; Store the INK colour (bits 0-2)
-  LD A,(BACKGROUND)       ; Collect the current room's background tile
-                          ; attribute from BACKGROUND
-  AND $F8                 ; Keep only bits 3-7 (PAPER, BRIGHT, FLASH)
-  OR (HL)                 ; Merge the INK bits
-  LD (HL),A               ; Store the resultant attribute byte
-  LD DE,$001F             ; Prepare DE for later addition
-  INC HL                  ; Move right one cell and store the attribute byte
-  LD (HL),A               ; there
-  ADD HL,DE               ; Move left one cell and down a row and store the
-  LD (HL),A               ; attribute byte there
-  INC HL                  ; Move right one cell and store the attribute byte
-  LD (HL),A               ; there
-  ADD HL,DE               ; Move left one cell and down a row and store the
-  LD (HL),A               ; attribute byte there
-  INC HL                  ; Move right one cell and store the attribute byte
-  LD (HL),A               ; there
-  RET
 
 ; Draw the items in the current room and collect any that Willy is touching
 ;
