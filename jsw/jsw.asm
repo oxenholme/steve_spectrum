@@ -661,13 +661,6 @@ INITSTATE:
                           ; at 23552 (copied from LOCATION)
   DEFB $00                ; Jumping animation counter (copied from JUMPING)
 
-; 256 minus the number of items remaining
-;
-; Initialised by the routine at TITLESCREEN, and updated by the routine at
-; DRAWITEMS when an item is collected.
-ITEMS:
-  DEFB $00
-
 ; Game mode indicator
 ;
 ; Initialised by the routine at TITLESCREEN, checked by the routines at
@@ -811,13 +804,8 @@ TITLESCREEN:
   LD (HL),$30
   LD H,$A4                ; Page A4 holds the first byte of each entry in the
                           ; item table
-  LD A,(FIRSTITEM)        ; Pick up the index of the first item from FIRSTITEM
-  LD L,A                  ; Point HL at the entry for the first item
-  LD (ITEMS),A            ; Initialise the counter of items remaining at ITEMS
-TITLESCREEN_0:
-  SET 6,(HL)              ; Set the collection flag for every item in the item
-  INC L                   ; table at ITEMTABLE1
-  JR NZ,TITLESCREEN_0
+  LD A,(ITEMTABLE2)       ; Pick up the index of the first item from ITEMTABLE2
+  LD (ITEMTABLE1),A       ; Store the index of the first item to ITEMTABLE1
   LD HL,MUSICFLAGS        ; Initialise the keypress flag in bit 0 at MUSICFLAGS
   SET 0,(HL)
 ; Next, prepare the screen.
@@ -1083,7 +1071,7 @@ MAINLOOP:
   LDIR
   CALL MOVETHINGS         ; Move the rope and guardians in the current room
   LD A,(MODE)             ; Pick up the game mode indicator from MODE
-  CP $03                  ; Is Willy's head down the toilet?
+  CP $02                  ; Is Willy's head down the toilet?
   CALL NZ,MOVEWILLY       ; If not, move Willy
 AFTERMOVE1:
   LD A,(PIXEL_Y)          ; Pick up Willy's pixel y-coordinate from PIXEL_Y
@@ -1092,12 +1080,12 @@ AFTERMOVE1:
   CALL NC,ROOMABOVE       ; If so, move Willy into the room above
 AFTERMOVE2:
   LD A,(MODE)             ; Pick up the game mode indicator from MODE
-  CP $03                  ; Is Willy's head down the toilet?
+  CP $02                  ; Is Willy's head down the toilet?
   CALL NZ,WILLYATTRS      ; If not, check and set the attribute bytes for
                           ; Willy's sprite in the buffer at 23552, and draw
                           ; Willy to the screen buffer at 24576
   LD A,(MODE)             ; Pick up the game mode indicator from MODE
-  CP $02                  ; Is Willy on his way to the toilet?
+  CP $01                  ; Is Willy on his way to the toilet?
   CALL Z,CHKTOILET        ; If so, check whether he's reached it yet
   CALL BEDANDBATH         ; Deal with special rooms (Master Bedroom, The
                           ; Bathroom)
@@ -1114,8 +1102,7 @@ MAINLOOP_0:
   LD BC,$1000
   LDIR
   LD A,(MODE)             ; Pick up the game mode indicator from MODE
-  AND $02                 ; Now A=1 if Willy is running to the toilet or
-  RRCA                    ; already has his head down it, 0 otherwise
+  AND $01                 ; Now A=1 if Willy is running to the toilet or
   LD HL,FRAME             ; Set Willy's animation frame at FRAME to 1 or 3 if
   OR (HL)                 ; Willy is running to the toilet or already has his
   LD (HL),A               ; head down it; this has the effect of moving Willy
@@ -1955,8 +1942,7 @@ MOVEWILLY2_1:
   LD E,A                  ; Save the result in E
   LD A,(MODE)             ; Pick up the game mode indicator (0, 1 or 2) from
                           ; MODE
-  AND $02                 ; Now A=1 if Willy is running to the toilet, 0
-  RRCA                    ; otherwise
+  AND $01                 ; Now A=1 if Willy is running to the toilet, 0
   XOR E                   ; Flip bit 0 of E if Willy is running to the toilet,
   LD E,A                  ; forcing him to move right (unless he's jumped onto
                           ; the bed, in which case bit 0 of E is now set,
@@ -2051,7 +2037,7 @@ MOVEWILLY2_4:
 ; A jump key or the fire button is being pressed. Time to make Willy jump.
 MOVEWILLY2_5:
   LD A,(MODE)             ; Pick up the game mode indicator from MODE
-  BIT 1,A                 ; Is Willy running to the toilet?
+  BIT 0,A                 ; Is Willy running to the toilet?
   JR NZ,MOVEWILLY3        ; Jump if so
   XOR A                   ; Initialise the jumping animation counter at JUMPING
   LD (JUMPING),A          ; to 0
@@ -2783,23 +2769,21 @@ DRAWTHINGS_22:
 ;
 ; Used by the routine at MAINLOOP.
 DRAWITEMS:
-  LD H,$A4                ; Page 164 holds the first byte of each entry in the
-                          ; item table
-  LD A,(FIRSTITEM)        ; Pick up the index of the first item from FIRSTITEM
-  LD L,A                  ; Point HL at the first byte of the first entry in
-                          ; the item table
+  LD HL,ITEMTABLE1        ; The first byte of the item table
+  LD L,(HL)               ; Pick up the index of the first item
+  DEC L                   ; Prepare for below
+
 ; The item-drawing loop begins here.
 DRAWITEMS_0:
+  INC L                   ; Increase item number
+  RET Z                   ; Return if all done
   LD C,(HL)               ; Pick up the first byte of the current entry in the
                           ; item table
-  RES 7,C                 ; Reset bit 7; bit 6 holds the collection flag, and
-                          ; bits 0-5 hold the room number
+  RES 7,C                 ; Reset bit 7 leaving room number
   LD A,(ROOM)             ; Pick up the number of the current room from ROOM
-  OR $40                  ; Set bit 6 (corresponding to the collection flag)
-  CP C                    ; Is the item in the current room and still
-                          ; uncollected?
-  JR NZ,DRAWITEMS_7       ; If not, jump to consider the next entry in the item
-                          ; table
+  CP C                    ; Is the item in the current room?
+  JR NZ,DRAWITEMS_0       ; If not, jump to back consider the next item
+
 ; This item is in the current room and has not been collected yet.
   LD A,(HL)               ; Pick up the first byte of the current entry in the
                           ; item table
@@ -2816,6 +2800,7 @@ DRAWITEMS_0:
   CP $07                  ; touching the item, or the room's background tile
                           ; has white INK, as in Swimming Pool)?
   JR NZ,DRAWITEMS_6       ; Jump if not
+
 ; Willy is touching this item (or the room's background tile has white INK), so
 ; add it to his collection.
   LD IX,MSG_ITEMS         ; Point IX at the number of items collected at
@@ -2845,16 +2830,28 @@ DRAWITEMS_4:
   DEC C
   DEC C
   JR NZ,DRAWITEMS_3
-  LD A,(ITEMS)            ; Update the counter of items remaining at ITEMS, and
+  LD A,(ITEMTABLE1)       ; Update the counter of items remaining, and
   INC A                   ; set the zero flag if there are no more items to
-  LD (ITEMS),A            ; collect
-  JR NZ,DRAWITEMS_5       ; Jump if there are any items still to be collected
-  LD A,$01                ; Update the game mode indicator at MODE to 1 (all
-  LD (MODE),A             ; items collected)
-DRAWITEMS_5:
-  RES 6,(HL)              ; Reset bit 6 of the first byte of the entry in the
-                          ; item table: the item has been collected
-  JR DRAWITEMS_7          ; Jump to consider the next entry in the item table
+  LD (ITEMTABLE1),A       ; collect
+  RET Z                   ; Return if no more items
+  DEC A                   ; Revert items in A
+  LD E,A                  ; swap this item with first uncollected item
+  LD D,H                  ; as that item will be ignorred next time
+  LD C,(HL)
+  LD A,(DE)
+  LD (HL),A
+  LD A,C
+  LD (DE),A
+  INC H
+  INC D
+  LD C,(HL)
+  LD A,(DE)
+  LD (HL),A
+  LD A,C
+  LD (DE),A
+  DEC H
+  JR DRAWITEMS_0          ; Jump back to consider next item
+
 ; Willy is not touching this item, so draw it and cycle its INK colour.
 DRAWITEMS_6:
   LD A,(TICKS)            ; Generate the INK colour for the item from the value
@@ -2880,13 +2877,7 @@ DRAWITEMS_6:
   LD B,$08                ; There are eight pixel rows to copy
   CALL PRINTCHAR_0        ; Draw the item to the screen buffer at 24576
   POP HL                  ; Restore the item table pointer to HL
-; The current item has been dealt with (skipped, collected or drawn) as
-; appropriate. Time to consider the next one.
-DRAWITEMS_7:
-  INC L                   ; Point HL at the first byte of the next entry in the
-                          ; item table
-  JR NZ,DRAWITEMS_0       ; Jump back unless we've examined every entry
-  RET
+  JP DRAWITEMS_0          ; Jump back to consider next item
 
 ; Draw a sprite
 ;
@@ -3086,9 +3077,9 @@ BEDANDBATH:
   LD A,(ROOM)             ; Pick up the number of the current room from ROOM
   CP $23                  ; Are we in Master Bedroom?
   JR NZ,DRAWTOILET        ; Jump if not
-  LD A,(MODE)             ; Pick up the game mode indicator from MODE
+  LD A,(ITEMTABLE1)       ; Pick up the remaining item count
   OR A                    ; Has Willy collected all the items?
-  JR NZ,BEDANDBATH_1      ; Jump if so
+  JR Z,BEDANDBATH_1       ; Jump if so
 ; Willy hasn't collected all the items yet, so Maria is on guard.
   LD A,(TICKS)            ; Pick up the minute counter from TICKS; this will
                           ; determine Maria's animation frame
@@ -3126,7 +3117,7 @@ BEDANDBATH_1:
   AND $1F
   CP $06                  ; Has Willy reached the bed (at x=5) yet?
   RET NC                  ; Return if not
-  LD A,$02                ; Update the game mode indicator at MODE to 2 (Willy
+  LD A,$01                ; Update the game mode indicator at MODE to 2 (Willy
   LD (MODE),A             ; is running to the toilet)
   RET
 
@@ -3146,7 +3137,7 @@ CHKTOILET:
   XOR A                   ; Reset the minute counter at TICKS to 0 (so that we
   LD (TICKS),A            ; get to see Willy's head down the toilet for at
                           ; least a whole game minute)
-  LD A,$03                ; Update the game mode indicator at MODE to 3
+  LD A,$02                ; Update the game mode indicator at MODE to 3
   LD (MODE),A             ; (Willy's head is down the toilet)
   RET
 
@@ -3165,7 +3156,7 @@ DRAWTOILET:
   RRCA
   LD E,A                  ; Now E=0 or 32
   LD A,(MODE)             ; Pick up the game mode indicator from MODE
-  CP $03                  ; Is Willy's head down the toilet?
+  CP $02                  ; Is Willy's head down the toilet?
   JR NZ,DRAWTOILET_0      ; Jump if not
   SET 6,E                 ; Now E=64 or 96
 DRAWTOILET_0:
@@ -5487,7 +5478,8 @@ ITEMTABLE1:
   DEFB $9E                ; Item 254 at (14,8) in The Banyan Tree
   DEFB $A1                ; Item 255 at (13,23) in The Bathroom
 ITEMTABLE2:
-  DEFS $AD                ; Unused
+  DEFB $AD                ; 256 - total items
+  DEFS $AC                ; Unused
   DEFB $19                ; Item 173 at (8,25) in Watch Tower
   DEFB $2A                ; Item 174 at (9,10) in Watch Tower
   DEFB $34                ; Item 175 at (9,20) in Watch Tower
