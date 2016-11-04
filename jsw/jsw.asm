@@ -1303,7 +1303,7 @@ DRAWLIVES_0:
   RLCA
   AND $60
   LD E,A                  ; Point DE at the corresponding Willy sprite (at
-  LD D,$9D                ; MANDAT+A)
+  LD D,MANDAT/$100        ; MANDAT+A)
   CALL DRAWSPRITE         ; Draw the Willy sprite on the screen
   POP BC                  ; Restore HL and BC
   POP HL
@@ -1844,7 +1844,7 @@ DRAWROOM:
   LD IX,$5E00             ; Point IX at the first byte of the attribute buffer
                           ; at 24064
   LD A,$70                ; Set the operand of the 'LD D,n' instruction at
-  LD ($8D5D),A            ; BUFMSB (below) to $70
+  LD (BUFMSB+1),A         ; BUFMSB (below) to $70
   CALL DRAWROOM_0         ; Draw the tiles for the top half of the room to the
                           ; screen buffer at 28672
   LD IX,$5F00             ; Point IX at the 256th byte of the attribute buffer
@@ -1852,7 +1852,7 @@ DRAWROOM:
                           ; of the room; this instruction is redundant, since
                           ; IX already holds 5F00
   LD A,$78                ; Set the operand of the 'LD D,n' instruction at
-  LD ($8D5D),A            ; BUFMSB (below) to $78
+  LD (BUFMSB+1),A         ; BUFMSB (below) to $78
 DRAWROOM_0:
   LD C,$00                ; C will count 256 tiles
 ; The following loop draws 256 tiles (for either the top half or the bottom
@@ -3284,7 +3284,7 @@ ROOMABOVE:
   ADD A,$A0               ; (at LOCATION) accordingly
   LD (LOCATION),A
   LD A,$5D
-  LD ($85D4),A
+  LD (LOCATION+1),A
   LD A,$D0                ; Adjust Willy's pixel y-coordinate (at PIXEL_Y) as
   LD (PIXEL_Y),A          ; well
   XOR A                   ; Reset the airborne status indicator at AIRBORNE
@@ -3314,7 +3314,7 @@ ROOMBELOW_0:
   AND $1F                 ; adjust his attribute buffer coordinates (at
   LD (LOCATION),A         ; LOCATION) accordingly
   LD A,$5C
-  LD ($85D4),A
+  LD (LOCATION+1),A
   POP HL                  ; Drop the return address (AFTERMOVE1, in the main
                           ; loop) from the stack
   JP STARTGAME_0          ; Draw the room and re-enter the main loop
@@ -3399,7 +3399,7 @@ BEDANDBATH:
   JR NC,BEDANDBATH_0      ; Jump if so
   LD E,$E0                ; E=224 (arm raised)
 BEDANDBATH_0:
-  LD D,$9C                ; Point DE at the sprite graphic data for Maria
+  LD D,MARIA0/$100        ; Point DE at the sprite graphic data for Maria
                           ; (MARIA0, MARIA1, MARIA2 or MARIA3)
   LD HL,$686E             ; Draw Maria at (11,14) in the screen buffer at 24576
   LD C,$01
@@ -3601,7 +3601,7 @@ DRAWWILLY:
   RRCA
   OR E
   LD E,A
-  LD D,$9D
+  LD D,MANDAT/$100
   LD A,(ROOM)             ; Pick up the number of the current room from ROOM
   CP $1D                  ; Are we in the The Nightmare Room?
   JR NZ,DRAWWILLY_0       ; Jump if not
@@ -3772,24 +3772,8 @@ INTROSOUND_2:
   JR NZ,INTROSOUND_0      ; Jump back if not
   RET
 
-; Unused routine
-  LD HL,$5E00             ; Copy the attribute buffer at 24064 to the top
-  LD DE,$5800             ; two-thirds of the screen
-  LD BC,$0200
-  LDIR
-  LD HL,$4000             ; Fill the top two-thirds of the display file with
-  LD DE,$4001             ; the byte value 24 (00011000)
-  LD BC,$0FFF
-  LD (HL),$18
-  LDIR
-  LD BC,$FEFE             ; Prepare BC for reading keys SHIFT-Z-X-C-V
-  IN A,(C)                ; Read these keys
-  BIT 2,A                 ; Is 'X' being pressed?
-  JP Z,$0000              ; Jump if so to reset the machine
-  JR $970F                ; Otherwise jump back to read the keyboard again
-
 ; Unused
-  DEFS $E8
+  DEFS $9800-$
 
 ; Attributes for the top two-thirds of the title screen
 ;
