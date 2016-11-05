@@ -34,7 +34,7 @@ ROOMNAME:
 ; Initialised upon entry to a room by the routine at STARTGAME.
 BACKGROUND:
   DEFS $09                ; Background tile (used by the routines at DRAWROOM,
-                          ; ROOMATTR, MOVEWILLY and WILLYATTR
+                          ; ROOMATTR, MOVEWILLY and WILLYATTR)
 FLOOR:
   DEFS $09                ; Floor tile (used by the routines at DRAWROOM and
                           ; ROOMATTR)
@@ -210,8 +210,7 @@ ENTITIES:
 ; | 7    | Unused                                                    |
 ; +------+-----------------------------------------------------------+
 ;
-; The rope uses the second and fourth bytes of the following slot in addition
-; to its own; these ten bytes are used as follows:
+; For a rope, the eight bytes are used as follows:
 ;
 ; +------+----------------------------------------------------------+
 ; | Byte | Contents                                                 |
@@ -229,9 +228,6 @@ ENTITIES:
 ; | 7    | Animation frame at which the rope changes direction (54) |
 ; +------+----------------------------------------------------------+
 ;
-; Note that if a rope were the eighth entity specified in a room, its buffer
-; would use the first and third bytes in the otherwise unused area at
-; EBOVERFLOW.
 ENTITYBUF:
   DEFS $08                ; Entity 1
   DEFS $08                ; Entity 2
@@ -242,194 +238,6 @@ ENTITYBUF:
   DEFS $08                ; Entity 7
   DEFS $08                ; Entity 8
   DEFB $FF                ; Terminator
-
-; Unused
-;
-; This area is not used, but if a rope were the eighth entity specified in a
-; room, its buffer would spill over from the eighth slot in the entity buffer
-; at ENTITYBUF and use the first and third bytes here.
-EBOVERFLOW:
-  DEFS $BF
-
-; Screen buffer address lookup table
-;
-; Used by the routines at GAMEOVER, DRAWTHINGS and DRAWWILLY. The value of the
-; Nth entry (0<=N<=127) in this lookup table is the screen buffer address for
-; the point with pixel coordinates (x,y)=(0,N), with the origin (0,0) at the
-; top-left corner.
-SBUFADDRS:
-  DEFW DISP2+$000         ; y=0
-  DEFW DISP2+$100         ; y=1
-  DEFW DISP2+$200         ; y=2
-  DEFW DISP2+$300         ; y=3
-  DEFW DISP2+$400         ; y=4
-  DEFW DISP2+$500         ; y=5
-  DEFW DISP2+$600         ; y=6
-  DEFW DISP2+$700         ; y=7
-  DEFW DISP2+$020         ; y=8
-  DEFW DISP2+$120         ; y=9
-  DEFW DISP2+$220         ; y=10
-  DEFW DISP2+$320         ; y=11
-  DEFW DISP2+$420         ; y=12
-  DEFW DISP2+$520         ; y=13
-  DEFW DISP2+$620         ; y=14
-  DEFW DISP2+$720         ; y=15
-  DEFW DISP2+$040         ; y=16
-  DEFW DISP2+$140         ; y=17
-  DEFW DISP2+$240         ; y=18
-  DEFW DISP2+$340         ; y=19
-  DEFW DISP2+$440         ; y=20
-  DEFW DISP2+$540         ; y=21
-  DEFW DISP2+$640         ; y=22
-  DEFW DISP2+$740         ; y=23
-  DEFW DISP2+$060         ; y=24
-  DEFW DISP2+$160         ; y=25
-  DEFW DISP2+$260         ; y=26
-  DEFW DISP2+$360         ; y=27
-  DEFW DISP2+$460         ; y=28
-  DEFW DISP2+$560         ; y=29
-  DEFW DISP2+$660         ; y=30
-  DEFW DISP2+$760         ; y=31
-  DEFW DISP2+$080         ; y=32
-  DEFW DISP2+$180         ; y=33
-  DEFW DISP2+$280         ; y=34
-  DEFW DISP2+$380         ; y=35
-  DEFW DISP2+$480         ; y=36
-  DEFW DISP2+$580         ; y=37
-  DEFW DISP2+$680         ; y=38
-  DEFW DISP2+$780         ; y=39
-  DEFW DISP2+$0A0         ; y=40
-  DEFW DISP2+$1A0         ; y=41
-  DEFW DISP2+$2A0         ; y=42
-  DEFW DISP2+$3A0         ; y=43
-  DEFW DISP2+$4A0         ; y=44
-  DEFW DISP2+$5A0         ; y=45
-  DEFW DISP2+$6A0         ; y=46
-  DEFW DISP2+$7A0         ; y=47
-  DEFW DISP2+$0C0         ; y=48
-  DEFW DISP2+$1C0         ; y=49
-  DEFW DISP2+$2C0         ; y=50
-  DEFW DISP2+$3C0         ; y=51
-  DEFW DISP2+$4C0         ; y=52
-  DEFW DISP2+$5C0         ; y=53
-  DEFW DISP2+$6C0         ; y=54
-  DEFW DISP2+$7C0         ; y=55
-  DEFW DISP2+$0E0         ; y=56
-  DEFW DISP2+$1E0         ; y=57
-  DEFW DISP2+$2E0         ; y=58
-  DEFW DISP2+$3E0         ; y=59
-  DEFW DISP2+$4E0         ; y=60
-  DEFW DISP2+$5E0         ; y=61
-  DEFW DISP2+$6E0         ; y=62
-  DEFW DISP2+$7E0         ; y=63
-  DEFW DISP2+$800         ; y=64
-  DEFW DISP2+$900         ; y=65
-  DEFW DISP2+$A00         ; y=66
-  DEFW DISP2+$B00         ; y=67
-  DEFW DISP2+$C00         ; y=68
-  DEFW DISP2+$D00         ; y=69
-  DEFW DISP2+$E00         ; y=70
-  DEFW DISP2+$F00         ; y=71
-  DEFW DISP2+$820         ; y=72
-  DEFW DISP2+$920         ; y=73
-  DEFW DISP2+$A20         ; y=74
-  DEFW DISP2+$B20         ; y=75
-  DEFW DISP2+$C20         ; y=76
-  DEFW DISP2+$D20         ; y=77
-  DEFW DISP2+$E20         ; y=78
-  DEFW DISP2+$F20         ; y=79
-  DEFW DISP2+$840         ; y=80
-  DEFW DISP2+$940         ; y=81
-  DEFW DISP2+$A40         ; y=82
-  DEFW DISP2+$B40         ; y=83
-  DEFW DISP2+$C40         ; y=84
-  DEFW DISP2+$D40         ; y=85
-  DEFW DISP2+$E40         ; y=86
-  DEFW DISP2+$F40         ; y=87
-  DEFW DISP2+$860         ; y=88
-  DEFW DISP2+$960         ; y=89
-  DEFW DISP2+$A60         ; y=90
-  DEFW DISP2+$B60         ; y=91
-  DEFW DISP2+$C60         ; y=92
-  DEFW DISP2+$D60         ; y=93
-  DEFW DISP2+$E60         ; y=94
-  DEFW DISP2+$F60         ; y=95
-  DEFW DISP2+$880         ; y=96
-  DEFW DISP2+$980         ; y=97
-  DEFW DISP2+$A80         ; y=98
-  DEFW DISP2+$B80         ; y=99
-  DEFW DISP2+$C80         ; y=100
-  DEFW DISP2+$D80         ; y=101
-  DEFW DISP2+$E80         ; y=102
-  DEFW DISP2+$F80         ; y=103
-  DEFW DISP2+$8A0         ; y=104
-  DEFW DISP2+$9A0         ; y=105
-  DEFW DISP2+$AA0         ; y=106
-  DEFW DISP2+$BA0         ; y=107
-  DEFW DISP2+$CA0         ; y=108
-  DEFW DISP2+$DA0         ; y=109
-  DEFW DISP2+$EA0         ; y=110
-  DEFW DISP2+$FA0         ; y=111
-  DEFW DISP2+$8C0         ; y=112
-  DEFW DISP2+$9C0         ; y=113
-  DEFW DISP2+$AC0         ; y=114
-  DEFW DISP2+$BC0         ; y=115
-  DEFW DISP2+$CC0         ; y=116
-  DEFW DISP2+$DC0         ; y=117
-  DEFW DISP2+$EC0         ; y=118
-  DEFW DISP2+$FC0         ; y=119
-  DEFW DISP2+$8E0         ; y=120
-  DEFW DISP2+$9E0         ; y=121
-  DEFW DISP2+$AE0         ; y=122
-  DEFW DISP2+$BE0         ; y=123
-  DEFW DISP2+$CE0         ; y=124
-  DEFW DISP2+$DE0         ; y=125
-  DEFW DISP2+$EE0         ; y=126
-  DEFW DISP2+$FE0         ; y=127
-
-; Rope animation table
-;
-; Used by the routine at DRAWTHINGS. The first half of this table controls the
-; x-coordinates at which the segments of rope are drawn, and the second half
-; controls the y-coordinates. For a given rope animation frame F (0<=F<=54),
-; the 32 entries from F to F+31 inclusive (one for each segment of rope) in
-; each half of the table are used; thus the batch of entries used 'slides' up
-; and down the table as F increases and decreases.
-ROPEANIM:
-  DEFB $00,$00,$00,$00,$00,$00,$00,$00 ; These values determine how much to
-  DEFB $00,$00,$00,$00,$00,$00,$00,$00 ; rotate the rope drawing byte (which in
-  DEFB $00,$00,$00,$00,$00,$00,$00,$00 ; turn determines the x-coordinate at
-  DEFB $00,$00,$00,$00,$00,$00,$00,$00 ; which each segment of rope is drawn)
-  DEFB $01,$01,$01,$01,$01,$01,$01,$01
-  DEFB $01,$01,$01,$01,$02,$02,$02,$02
-  DEFB $02,$02,$02,$02,$02,$02,$02,$02
-  DEFB $02,$02,$02,$02,$02,$02,$02,$02
-  DEFB $02,$02,$01,$02,$02,$01,$01,$02
-  DEFB $01,$01,$02,$02,$03,$02,$03,$02
-  DEFB $03,$03,$03,$03,$03,$03
-  DEFB $00,$00,$00,$00,$00,$00,$00,$00 ; Unused
-  DEFB $00,$00,$00,$00,$00,$00,$00,$00
-  DEFB $00,$00,$00,$00,$00,$00,$00,$00
-  DEFB $00,$00,$00,$00,$00,$00,$00,$00
-  DEFB $00,$00,$00,$00,$00,$00,$00,$00
-  DEFB $00,$00
-  DEFB $06,$06,$06,$06,$06,$06,$06,$06 ; These values determine the
-  DEFB $06,$06,$06,$06,$06,$06,$06,$06 ; y-coordinate of each segment of rope
-  DEFB $06,$06,$06,$06,$06,$06,$06,$06 ; relative to the one above it
-  DEFB $06,$06,$06,$06,$06,$06,$06,$06
-  DEFB $06,$06,$06,$06,$06,$06,$06,$06
-  DEFB $06,$06,$06,$06,$06,$06,$06,$06
-  DEFB $04,$06,$06,$04,$06,$04,$06,$04
-  DEFB $06,$04,$04,$04,$06,$04,$04,$04
-  DEFB $04,$04,$04,$04,$04,$04,$04,$04
-  DEFB $04,$04,$04,$04,$04,$04,$04,$04
-  DEFB $04,$04,$04,$04,$04,$04
-  DEFB $00,$00,$00,$00,$00,$00,$00,$00 ; Unused
-  DEFB $00,$00,$00,$00,$00,$00,$00,$00
-  DEFB $00,$00,$00,$00,$00,$00,$00,$00
-  DEFB $00,$00,$00,$00,$00,$00,$00,$00
-  DEFB $00,$00,$00,$00,$00,$00,$00,$00
-  DEFB $00,$00
 
 ; Current room number
 ;
@@ -812,16 +620,14 @@ TITLESCREEN:
   LD (HL),$30
   INC HL
   LD (HL),$30
-  LD H,$A4                ; Page A4 holds the first byte of each entry in the
-                          ; item table
   LD A,(ITEMTABLE2)       ; Pick up the index of the first item from ITEMTABLE2
   LD (ITEMTABLE1),A       ; Store the index of the first item to ITEMTABLE1
   LD HL,MUSICFLAGS        ; Initialise the keypress flag in bit 0 at MUSICFLAGS
   SET 0,(HL)
 ; Next, prepare the screen.
 TITLESCREEN_1:
-  LD HL,$4000             ; Clear the entire display file
-  LD DE,$4001
+  LD HL,DISP              ; Clear the entire display file
+  LD DE,DISP+1
   LD BC,$17FF
   LD (HL),$00
   LDIR
@@ -991,7 +797,7 @@ STARTGAME_0:
 STARTGAME_1:
   LD L,(IX+$00)           ; Pick up the first byte of the entity specification
   RES 7,L                 ; Point HL at the corresponding entry in the table of
-  LD H,$14                ; entity definitions at ENTITYDEFS
+  LD H,ENTITYDEFS/$800    ; entity definitions at ENTITYDEFS
   ADD HL,HL
   ADD HL,HL
   ADD HL,HL
@@ -1445,9 +1251,9 @@ LOSELIFE_2:
 ;
 ; Used by the routine at LOSELIFE.
 GAMEOVER:
-  LD HL,$4000             ; Clear the top two-thirds of the display file
-  LD DE,$4001
-  LD BC,$0FFF
+  LD HL,DISP              ; Clear the top two-thirds of the display file
+  LD DE,DISP+1
+  LD BC,DISP_SIZE-1
   LD (HL),$00
   LDIR
   XOR A                   ; Initialise the temporary game status buffer
@@ -1466,7 +1272,7 @@ GAMEOVER:
 GAMEOVER_0:
   LD A,(TEMPVAR)          ; Pick up the distance variable from TEMPVAR
   LD C,A                  ; Point BC at the corresponding entry in the screen
-  LD B,$82                ; buffer address lookup table at SBUFADDRS
+  LD B,SBUFADDRS/$100     ; buffer address lookup table at SBUFADDRS
   LD A,(BC)               ; Point HL at the corresponding location in the
   OR $0F                  ; display file
   LD L,A
@@ -1581,10 +1387,6 @@ DRAWROOM:
   LD (BUFMSB+1),A         ; BUFMSB (below) to $70
   CALL DRAWROOM_0         ; Draw the tiles for the top half of the room to the
                           ; screen buffer at 28672
-  LD IX,ATTR1+$0100       ; Point IX at the 256th byte of the attribute buffer
-                          ; at 24064 in preparation for drawing the bottom half
-                          ; of the room; this instruction is redundant, since
-                          ; IX already holds 5F00
   LD A,DISP1/$100+8       ; Set the operand of the 'LD D,n' instruction at
   LD (BUFMSB+1),A         ; BUFMSB (below) to $78
 DRAWROOM_0:
@@ -2470,7 +2272,7 @@ DRAWTHINGS_0:
   JR Z,DRAWTHINGS_2       ; Jump if so
 ; We are dealing with a horizontal or vertical guardian.
   LD E,(IX+$03)           ; Point DE at the entry in the screen buffer address
-  LD D,$82                ; lookup table at SBUFADDRS that corresponds to the
+  LD D,SBUFADDRS/$100     ; lookup table at SBUFADDRS that corresponds to the
                           ; guardian's y-coordinate
   LD A,(DE)               ; Copy the LSB of the screen buffer address to L
   LD L,A
@@ -2519,7 +2321,7 @@ DRAWTHINGS_1:
   AND $E0                 ; Keep only bits 5-7
   LD E,A                  ; Point DE at the graphic data for the guardian's
   LD D,(IX+$05)           ; current animation frame (see GUARDIANS)
-  LD H,$82                ; Point HL at the guardian's current location in the
+  LD H,SBUFADDRS/$100     ; Point HL at the guardian's current location in the
   LD L,(IX+$03)           ; screen buffer at 24576
   LD A,(IX+$02)
   AND $1F
@@ -2564,7 +2366,7 @@ DRAWTHINGS_7:
                           ; on-screen)?
   JP NZ,DRAWTHINGS_22     ; If not, jump to consider the next entity definition
   LD E,(IX+$02)           ; Point DE at the entry in the screen buffer address
-  LD D,$82                ; lookup table at SBUFADDRS that corresponds to the
+  LD D,SBUFADDRS/$100     ; lookup table at SBUFADDRS that corresponds to the
                           ; arrow's y-coordinate
   LD A,(DE)               ; Pick up the LSB of the screen buffer address
   ADD A,(IX+$04)          ; Adjust it for the arrow's x-coordinate
@@ -3118,7 +2920,7 @@ BEDANDBATH_0:
   LD (ATTR2+$016E),HL     ; Set the attribute bytes for the top half of Maria's
                           ; sprite in the buffer at 23552
   LD HL,$0707             ; H=L=7 (INK 7: PAPER 0: BRIGHT 0)
-  LD (ATTR2+$018E),HL           ; Set the attribute bytes for the bottom half of
+  LD (ATTR2+$018E),HL     ; Set the attribute bytes for the bottom half of
                           ; Maria's sprite in the buffer at 23552
   RET
 ; Willy has collected all the items, so Maria is gone.
@@ -3172,7 +2974,7 @@ DRAWTOILET:
 DRAWTOILET_0:
   LD D,$A6                ; Point DE at the toilet sprite to use (TOILET0,
                           ; TOILET1, TOILET2 or TOILET3)
-  LD IX,$82D0             ; Draw the toilet at (13,28) in the screen buffer at
+  LD IX,SBUFADDRS+$D0     ; Draw the toilet at (13,28) in the screen buffer at
   LD BC,$101C             ; 24576
   CALL DRAWWILLY_1
   LD HL,$0707             ; H=L=7 (INK 7: PAPER 0)
@@ -3295,7 +3097,7 @@ DRAWWILLY:
   LD A,(PIXEL_Y)          ; Pick up Willy's pixel y-coordinate from PIXEL_Y
   ADD A,B                 ; Add the y-coordinate offset (to get Willy's true
                           ; pixel y-coordinate if he's standing on a ramp)
-  LD IXh,$82              ; Point IX at the entry in the screen buffer address
+  LD IXh,SBUFADDRS/$100   ; Point IX at the entry in the screen buffer address
   LD IXl,A                ; lookup table at SBUFADDRS that corresponds to
                           ; Willy's y-coordinate
   LD A,(DMFLAGS)          ; Pick up Willy's direction and movement flags from
@@ -3482,7 +3284,187 @@ INTROSOUND_2:
   RET
 
 ; Unused
-  DEFS $9800-$
+  DEFS $9600-$
+
+; Screen buffer address lookup table
+;
+; Used by the routines at GAMEOVER, DRAWTHINGS and DRAWWILLY. The value of the
+; Nth entry (0<=N<=127) in this lookup table is the screen buffer address for
+; the point with pixel coordinates (x,y)=(0,N), with the origin (0,0) at the
+; top-left corner.
+SBUFADDRS:
+  DEFW DISP2+$000         ; y=0
+  DEFW DISP2+$100         ; y=1
+  DEFW DISP2+$200         ; y=2
+  DEFW DISP2+$300         ; y=3
+  DEFW DISP2+$400         ; y=4
+  DEFW DISP2+$500         ; y=5
+  DEFW DISP2+$600         ; y=6
+  DEFW DISP2+$700         ; y=7
+  DEFW DISP2+$020         ; y=8
+  DEFW DISP2+$120         ; y=9
+  DEFW DISP2+$220         ; y=10
+  DEFW DISP2+$320         ; y=11
+  DEFW DISP2+$420         ; y=12
+  DEFW DISP2+$520         ; y=13
+  DEFW DISP2+$620         ; y=14
+  DEFW DISP2+$720         ; y=15
+  DEFW DISP2+$040         ; y=16
+  DEFW DISP2+$140         ; y=17
+  DEFW DISP2+$240         ; y=18
+  DEFW DISP2+$340         ; y=19
+  DEFW DISP2+$440         ; y=20
+  DEFW DISP2+$540         ; y=21
+  DEFW DISP2+$640         ; y=22
+  DEFW DISP2+$740         ; y=23
+  DEFW DISP2+$060         ; y=24
+  DEFW DISP2+$160         ; y=25
+  DEFW DISP2+$260         ; y=26
+  DEFW DISP2+$360         ; y=27
+  DEFW DISP2+$460         ; y=28
+  DEFW DISP2+$560         ; y=29
+  DEFW DISP2+$660         ; y=30
+  DEFW DISP2+$760         ; y=31
+  DEFW DISP2+$080         ; y=32
+  DEFW DISP2+$180         ; y=33
+  DEFW DISP2+$280         ; y=34
+  DEFW DISP2+$380         ; y=35
+  DEFW DISP2+$480         ; y=36
+  DEFW DISP2+$580         ; y=37
+  DEFW DISP2+$680         ; y=38
+  DEFW DISP2+$780         ; y=39
+  DEFW DISP2+$0A0         ; y=40
+  DEFW DISP2+$1A0         ; y=41
+  DEFW DISP2+$2A0         ; y=42
+  DEFW DISP2+$3A0         ; y=43
+  DEFW DISP2+$4A0         ; y=44
+  DEFW DISP2+$5A0         ; y=45
+  DEFW DISP2+$6A0         ; y=46
+  DEFW DISP2+$7A0         ; y=47
+  DEFW DISP2+$0C0         ; y=48
+  DEFW DISP2+$1C0         ; y=49
+  DEFW DISP2+$2C0         ; y=50
+  DEFW DISP2+$3C0         ; y=51
+  DEFW DISP2+$4C0         ; y=52
+  DEFW DISP2+$5C0         ; y=53
+  DEFW DISP2+$6C0         ; y=54
+  DEFW DISP2+$7C0         ; y=55
+  DEFW DISP2+$0E0         ; y=56
+  DEFW DISP2+$1E0         ; y=57
+  DEFW DISP2+$2E0         ; y=58
+  DEFW DISP2+$3E0         ; y=59
+  DEFW DISP2+$4E0         ; y=60
+  DEFW DISP2+$5E0         ; y=61
+  DEFW DISP2+$6E0         ; y=62
+  DEFW DISP2+$7E0         ; y=63
+  DEFW DISP2+$800         ; y=64
+  DEFW DISP2+$900         ; y=65
+  DEFW DISP2+$A00         ; y=66
+  DEFW DISP2+$B00         ; y=67
+  DEFW DISP2+$C00         ; y=68
+  DEFW DISP2+$D00         ; y=69
+  DEFW DISP2+$E00         ; y=70
+  DEFW DISP2+$F00         ; y=71
+  DEFW DISP2+$820         ; y=72
+  DEFW DISP2+$920         ; y=73
+  DEFW DISP2+$A20         ; y=74
+  DEFW DISP2+$B20         ; y=75
+  DEFW DISP2+$C20         ; y=76
+  DEFW DISP2+$D20         ; y=77
+  DEFW DISP2+$E20         ; y=78
+  DEFW DISP2+$F20         ; y=79
+  DEFW DISP2+$840         ; y=80
+  DEFW DISP2+$940         ; y=81
+  DEFW DISP2+$A40         ; y=82
+  DEFW DISP2+$B40         ; y=83
+  DEFW DISP2+$C40         ; y=84
+  DEFW DISP2+$D40         ; y=85
+  DEFW DISP2+$E40         ; y=86
+  DEFW DISP2+$F40         ; y=87
+  DEFW DISP2+$860         ; y=88
+  DEFW DISP2+$960         ; y=89
+  DEFW DISP2+$A60         ; y=90
+  DEFW DISP2+$B60         ; y=91
+  DEFW DISP2+$C60         ; y=92
+  DEFW DISP2+$D60         ; y=93
+  DEFW DISP2+$E60         ; y=94
+  DEFW DISP2+$F60         ; y=95
+  DEFW DISP2+$880         ; y=96
+  DEFW DISP2+$980         ; y=97
+  DEFW DISP2+$A80         ; y=98
+  DEFW DISP2+$B80         ; y=99
+  DEFW DISP2+$C80         ; y=100
+  DEFW DISP2+$D80         ; y=101
+  DEFW DISP2+$E80         ; y=102
+  DEFW DISP2+$F80         ; y=103
+  DEFW DISP2+$8A0         ; y=104
+  DEFW DISP2+$9A0         ; y=105
+  DEFW DISP2+$AA0         ; y=106
+  DEFW DISP2+$BA0         ; y=107
+  DEFW DISP2+$CA0         ; y=108
+  DEFW DISP2+$DA0         ; y=109
+  DEFW DISP2+$EA0         ; y=110
+  DEFW DISP2+$FA0         ; y=111
+  DEFW DISP2+$8C0         ; y=112
+  DEFW DISP2+$9C0         ; y=113
+  DEFW DISP2+$AC0         ; y=114
+  DEFW DISP2+$BC0         ; y=115
+  DEFW DISP2+$CC0         ; y=116
+  DEFW DISP2+$DC0         ; y=117
+  DEFW DISP2+$EC0         ; y=118
+  DEFW DISP2+$FC0         ; y=119
+  DEFW DISP2+$8E0         ; y=120
+  DEFW DISP2+$9E0         ; y=121
+  DEFW DISP2+$AE0         ; y=122
+  DEFW DISP2+$BE0         ; y=123
+  DEFW DISP2+$CE0         ; y=124
+  DEFW DISP2+$DE0         ; y=125
+  DEFW DISP2+$EE0         ; y=126
+  DEFW DISP2+$FE0         ; y=127
+
+; Rope animation table
+;
+; Used by the routine at DRAWTHINGS. The first half of this table controls the
+; x-coordinates at which the segments of rope are drawn, and the second half
+; controls the y-coordinates. For a given rope animation frame F (0<=F<=54),
+; the 32 entries from F to F+31 inclusive (one for each segment of rope) in
+; each half of the table are used; thus the batch of entries used 'slides' up
+; and down the table as F increases and decreases.
+ROPEANIM:
+  DEFB $00,$00,$00,$00,$00,$00,$00,$00 ; These values determine how much to
+  DEFB $00,$00,$00,$00,$00,$00,$00,$00 ; rotate the rope drawing byte (which in
+  DEFB $00,$00,$00,$00,$00,$00,$00,$00 ; turn determines the x-coordinate at
+  DEFB $00,$00,$00,$00,$00,$00,$00,$00 ; which each segment of rope is drawn)
+  DEFB $01,$01,$01,$01,$01,$01,$01,$01
+  DEFB $01,$01,$01,$01,$02,$02,$02,$02
+  DEFB $02,$02,$02,$02,$02,$02,$02,$02
+  DEFB $02,$02,$02,$02,$02,$02,$02,$02
+  DEFB $02,$02,$01,$02,$02,$01,$01,$02
+  DEFB $01,$01,$02,$02,$03,$02,$03,$02
+  DEFB $03,$03,$03,$03,$03,$03
+  DEFB $00,$00,$00,$00,$00,$00,$00,$00 ; Unused
+  DEFB $00,$00,$00,$00,$00,$00,$00,$00
+  DEFB $00,$00,$00,$00,$00,$00,$00,$00
+  DEFB $00,$00,$00,$00,$00,$00,$00,$00
+  DEFB $00,$00,$00,$00,$00,$00,$00,$00
+  DEFB $00,$00
+  DEFB $06,$06,$06,$06,$06,$06,$06,$06 ; These values determine the
+  DEFB $06,$06,$06,$06,$06,$06,$06,$06 ; y-coordinate of each segment of rope
+  DEFB $06,$06,$06,$06,$06,$06,$06,$06 ; relative to the one above it
+  DEFB $06,$06,$06,$06,$06,$06,$06,$06
+  DEFB $06,$06,$06,$06,$06,$06,$06,$06
+  DEFB $06,$06,$06,$06,$06,$06,$06,$06
+  DEFB $04,$06,$06,$04,$06,$04,$06,$04
+  DEFB $06,$04,$04,$04,$06,$04,$04,$04
+  DEFB $04,$04,$04,$04,$04,$04,$04,$04
+  DEFB $04,$04,$04,$04,$04,$04,$04,$04
+  DEFB $04,$04,$04,$04,$04,$04
+  DEFB $00,$00,$00,$00,$00,$00,$00,$00 ; Unused
+  DEFB $00,$00,$00,$00,$00,$00,$00,$00
+  DEFB $00,$00,$00,$00,$00,$00,$00,$00
+  DEFB $00,$00,$00,$00,$00,$00,$00,$00
+  DEFB $00,$00,$00,$00,$00,$00,$00,$00
+  DEFB $00,$00
 
 ; Attributes for the top two-thirds of the title screen
 ;
@@ -5373,13 +5355,7 @@ ENTITY111:
 ; whose first byte is $7F or $FF; the first byte of the definition ($FF) serves
 ; to terminate the entity buffer.
 ENTITY127:
-  DEFB $FF,$00,$00,$00,$00,$00,$00
-
-; Index of the first item
-;
-; Used by the routines at TITLESCREEN and DRAWITEMS.
-FIRSTITEM:
-  DEFB $AD
+  DEFB $FF,$00,$00,$00,$00,$00,$00,$00
 
 ; Item table
 ;
@@ -5393,8 +5369,7 @@ FIRSTITEM:
 ; | Bit(s) | Meaning                                            |
 ; +--------+----------------------------------------------------+
 ; | 15     | Most significant bit of the y-coordinate           |
-; | 14     | Collection flag (reset=collected, set=uncollected) |
-; | 8-13   | Room number                                        |
+; | 8-14   | Room number                                        |
 ; | 5-7    | Least significant bits of the y-coordinate         |
 ; | 0-4    | x-coordinate                                       |
 ; +--------+----------------------------------------------------+
