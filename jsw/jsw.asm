@@ -16,13 +16,6 @@ ATTR2:      EQU $5E00
 ATTR:       EQU $5800
 ATTR_SIZE:  EQU $0200
 
-; Room layout
-;
-; Initialised upon entry to a room and then used by the routine at STARTGAME,
-; and also used by the routine at ROOMATTRS.
-ROOMLAYOUT:
-  DEFS $80
-
 ; Room name
 ;
 ; Initialised upon entry to a room and then used by the routine at STARTGAME.
@@ -782,13 +775,16 @@ STARTGAME:
 ; the room from below) and ROOMBELOW (when Willy has entered the room from
 ; above).
 STARTGAME_0:
+  LD DE,ROOMNAME          ; Copy the room definition into the game status
+  LD BC,$0080             ; buffer at 8000
   LD A,(ROOM)             ; Pick up the current room number from ROOM
   ADD A,$60               ; Point HL at the first byte of the room definition
   LD H,A
-  LD L,$00
-  LD DE,ROOMLAYOUT        ; Copy the room definition into the game status
-  LD BC,$0100             ; buffer at 8000
+  LD L,C
   LDIR
+  DEC H
+  CALL DRAWROOM           ; Draw the current room to the screen buffer at 28672
+                          ; and the attribute buffer at 24064
   LD IX,ENTITIES          ; Point IX at the first byte of the first entity
                           ; specification for the current room at ENTITIES
   LD DE,ENTITYBUF         ; Point DE at the first byte of the entity buffer at
@@ -816,8 +812,6 @@ STARTGAME_1:
   LD DE,INITSTATE         ; (position, animation frame etc.) on entry to this
   LD BC,$0007             ; room from 85CF-85D5 to INITSTATE
   LDIR
-  CALL DRAWROOM           ; Draw the current room to the screen buffer at 28672
-                          ; and the attribute buffer at 24064
   LD HL,$5000             ; Clear the bottom third of the display file
   LD DE,$5001
   LD BC,$07FF
@@ -1429,8 +1423,6 @@ DRAWROOM_2:
 ; bytes for the background, floor, wall, nasty, conveyor and ramp tiles in the
 ; current room.
 ROOMATTRS:
-  LD HL,ROOMLAYOUT        ; Point HL at the first room layout byte at
-                          ; ROOMLAYOUT
   LD IX,ATTR1             ; Point IX at the first byte of the attribute buffer
                           ; at 24064
 ; The following loop copies the attribute bytes for the background, floor, wall
@@ -1514,7 +1506,7 @@ ROOMATTR:
   RLCA
   RLCA
   ADD A,C
-  ADD A,$A0
+  ADD A,BACKGROUND%$100
   LD E,A                  ; Point DE at the attribute byte for the background,
   LD D,BACKGROUND/$100    ; floor, wall or nasty tile (see BACKGROUND)
   LD A,(DE)               ; Copy the attribute byte into the buffer at 24064
