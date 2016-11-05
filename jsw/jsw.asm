@@ -4,10 +4,10 @@
 ; Copyright 1984 Software Projects Ltd (Jet Set Willy)
 ; Copyright 2012-2016 Richard Dymond (this disassembly)
 
-  ORG $8000
+  ORG $A000
 
-DISP1:      EQU $6000
-DISP2:      EQU $7000
+DISP1:      EQU $E000
+DISP2:      EQU $F000
 DISP:       EQU $4000
 DISP_SIZE:  EQU $1000
 
@@ -783,7 +783,7 @@ STARTGAME:
 ; above).
 STARTGAME_0:
   LD A,(ROOM)             ; Pick up the current room number from ROOM
-  OR $C0                  ; Point HL at the first byte of the room definition
+  ADD A,$60               ; Point HL at the first byte of the room definition
   LD H,A
   LD L,$00
   LD DE,ROOMLAYOUT        ; Copy the room definition into the game status
@@ -1516,7 +1516,7 @@ ROOMATTR:
   ADD A,C
   ADD A,$A0
   LD E,A                  ; Point DE at the attribute byte for the background,
-  LD D,$80                ; floor, wall or nasty tile (see BACKGROUND)
+  LD D,BACKGROUND/$100    ; floor, wall or nasty tile (see BACKGROUND)
   LD A,(DE)               ; Copy the attribute byte into the buffer at 24064
   LD (IX+$00),A
   INC IX                  ; Move IX along to the next byte in the attribute
@@ -2972,7 +2972,7 @@ DRAWTOILET:
   JR NZ,DRAWTOILET_0      ; Jump if not
   SET 6,E                 ; Now E=64 or 96
 DRAWTOILET_0:
-  LD D,$A6                ; Point DE at the toilet sprite to use (TOILET0,
+  LD D,TOILET0/$100       ; Point DE at the toilet sprite to use (TOILET0,
                           ; TOILET1, TOILET2 or TOILET3)
   LD IX,SBUFADDRS+$D0     ; Draw the toilet at (13,28) in the screen buffer at
   LD BC,$101C             ; 24576
@@ -3116,7 +3116,7 @@ DRAWWILLY:
   LD A,(ROOM)             ; Pick up the number of the current room from ROOM
   CP $1D                  ; Are we in the The Nightmare Room?
   JR NZ,DRAWWILLY_0       ; Jump if not
-  LD D,$B6                ; Point DE at the graphic data for the flying pig
+  LD D,FLYINGPIG0/$100    ; Point DE at the graphic data for the flying pig
   LD A,E                  ; sprite (FLYINGPIG0+E)
   XOR $80
   LD E,A
@@ -3284,7 +3284,7 @@ INTROSOUND_2:
   RET
 
 ; Unused
-  DEFS $9600-$
+  DEFS $B600-$
 
 ; Screen buffer address lookup table
 ;
@@ -3525,7 +3525,7 @@ ATTRSLOWER:
   DEFB $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
 
 ; Unused
-  DEFS $9E40-$
+  DEFS $BE40-$
 
 ; Foot/barrel graphic data
 ;
@@ -5975,6 +5975,8 @@ FLYINGPIG0:
   DEFB $08,$82,$07,$2C,$15,$50,$2A,$A4,$55,$44,$AA,$84,$45,$00,$0C,$C0
   DEFB $00,$00,$07,$00,$2F,$A4,$50,$56,$22,$24,$52,$54,$3F,$E4,$17,$44
   DEFB $08,$80,$07,$04,$15,$52,$2A,$AC,$55,$40,$AA,$84,$45,$04,$19,$84
+
+  ORG $6000
 
 ; Room 0x00: The Off Licence (teleport: 9)
 ;
