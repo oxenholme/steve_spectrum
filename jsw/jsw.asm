@@ -4,15 +4,14 @@
 ; Copyright 1984 Software Projects Ltd (Jet Set Willy)
 ; Copyright 2012-2016 Richard Dymond (this disassembly)
 
-  ORG $A000
+  ORG $B000
 
-DISP1:      EQU $E000
 DISP2:      EQU $F000
 DISP:       EQU $4000
 DISP_SIZE:  EQU $1000
 
-ATTR1:      EQU $5C00
-ATTR2:      EQU $5E00
+ATTR1:      EQU $5C00 ; Really an block description offset buffer now
+ATTR2:      EQU $5E00 ; Still an attribute buffer
 ATTR:       EQU $5800
 ATTR_SIZE:  EQU $0200
 
@@ -783,8 +782,7 @@ STARTGAME_0:
   LD L,C
   LDIR
   DEC H
-  CALL DRAWROOM           ; Draw the current room to the screen buffer at 28672
-                          ; and the attribute buffer at 24064
+  CALL ROOMATTRS          ; Draw the current room to ATTR1
   LD IX,ENTITIES          ; Point IX at the first byte of the first entity
                           ; specification for the current room at ENTITIES
   LD DE,ENTITYBUF         ; Point DE at the first byte of the entity buffer at
@@ -871,14 +869,7 @@ DRAWLIVES_0:
 ; Used by the routines at STARTGAME and ENDPAUSE.
 MAINLOOP:
   CALL DRAWLIVES          ; Draw the remaining lives
-  LD HL,ATTR1             ; Copy the contents of the attribute buffer at 24064
-  LD DE,ATTR2             ; (the attributes for the empty room) into the
-  LD BC,ATTR_SIZE         ; attribute buffer at 23552
-  LDIR
-  LD HL,DISP1             ; Copy the contents of the screen buffer at 28672
-  LD DE,DISP2             ; (the tiles for the empty room) into the screen
-  LD BC,DISP_SIZE         ; buffer at 24576
-  LDIR
+  CALL COPYROOM           ; Populate ATTR2/DISP2 from ATTR1
   CALL MOVETHINGS         ; Move the rope and guardians in the current room
   LD A,(MODE)             ; Pick up the game mode indicator from MODE
   CP $02                  ; Is Willy's head down the toilet?
@@ -1369,64 +1360,80 @@ GAMEOVER_3:
   JR NZ,GAMEOVER_3        ; Jump back unless it's zero
   JP TITLESCREEN          ; Display the title screen and play the theme tune
 
-; Draw the current room to the screen buffer at 7000
+; Copy the current room to the screen buffer at 7000
 ;
-; Used by the routine at STARTGAME.
-DRAWROOM:
-  CALL ROOMATTRS          ; Fill the buffer at 24064 with attribute bytes for
-                          ; the current room
-  LD IX,ATTR1             ; Point IX at the first byte of the attribute buffer
-                          ; at 24064
-  LD A,DISP1/$100         ; Set the operand of the 'LD D,n' instruction at
-  LD (BUFMSB+1),A         ; BUFMSB (below) to $70
-  CALL DRAWROOM_0         ; Draw the tiles for the top half of the room to the
-                          ; screen buffer at 28672
-  LD A,DISP1/$100+8       ; Set the operand of the 'LD D,n' instruction at
-  LD (BUFMSB+1),A         ; BUFMSB (below) to $78
-DRAWROOM_0:
-  LD C,$00                ; C will count 256 tiles
-; The following loop draws 256 tiles (for either the top half or the bottom
-; half of the room) to the screen buffer at 28672.
-DRAWROOM_1:
-  LD E,C                  ; E holds the LSB of the screen buffer address
-  LD A,(IX+$00)           ; Pick up an attribute byte from the buffer at 24064;
-                          ; this identifies the type of tile (background,
-                          ; floor, wall, nasty, ramp or conveyor) to be drawn
-  LD HL,BACKGROUND        ; Move HL through the attribute bytes and graphic
-  LD BC,$0036             ; data of the background, floor, wall, nasty, ramp
-  CPIR                    ; and conveyor tiles starting at BACKGROUND until we
-                          ; find a byte that matches the attribute byte of the
-                          ; tile to be drawn; note that if a graphic data byte
-                          ; matches the attribute byte being searched for, the
-                          ; CPIR instruction can exit early, which is a bug
-  LD C,E                  ; Restore the value of the tile counter in C
-  LD B,$08                ; There are eight bytes in the tile
-BUFMSB:
-  LD D,$00                ; This instruction is set to either 'LD D,$70' or 'LD
-                          ; D,$78' above; now DE holds the appropriate address
-                          ; in the screen buffer at 28672
-DRAWROOM_2:
-  LD A,(HL)               ; Copy the tile graphic data to the screen buffer at
-  LD (DE),A               ; 28672
-  INC HL
+; Used by the routine at MAINLOOP.
+COPYROOM:
+  LD DE,ATTR1             ; Buffer holding block offsets
+  EXX
+  LD B,BACKGROUND/$100    ; MSB of block definition addresses
+  LD DE,ATTR2
+  LD HL,DISP2
+  EXX
+  LD B,$00
+  CALL COPYROOM_0         ; do top half
   INC D
-  DJNZ DRAWROOM_2
-  INC IX                  ; Move IX along to the next byte in the attribute
-                          ; buffer
-  INC C                   ; Have we drawn 256 tiles yet?
-  JP NZ,DRAWROOM_1        ; If not, jump back to draw the next one
+  EXX
+  INC D
+  LD H,DISP2/$100+$08
+  EXX                     ; continue to do bottom half...
+
+COPYROOM_0:
+  LD A,(DE)               ; LSB of block definition address
+  INC E
+  EXX
+  LD C,A                  ; BC points to block definition
+  LD A,(BC)
+  LD (DE),A               ; copy attribute
+  INC C
+  INC E
+  LD A,(BC)
+  LD (HL),A               ; copy row 0
+  INC C
+  INC H
+  LD A,(BC)
+  LD (HL),A               ; ... 1
+  INC C
+  INC H
+  LD A,(BC)
+  LD (HL),A               ; ... 2
+  INC C
+  INC H
+  LD A,(BC)
+  LD (HL),A               ; ... 3
+  INC C
+  INC H
+  LD A,(BC)
+  LD (HL),A               ; ... 4
+  INC C
+  INC H
+  LD A,(BC)
+  LD (HL),A               ; ... 5
+  INC C
+  INC H
+  LD A,(BC)
+  LD (HL),A               ; ... 6
+  INC C
+  INC H
+  LD A,(BC)
+  LD (HL),A               ; ... 7
+
+  INC L
+  LD A,-7
+  ADD A,H
+  LD H,A
+  EXX
+  DJNZ COPYROOM_0
   RET
 
 ; Fill the buffer at 5E00 with attribute bytes for the current room
 ;
-; Used by the routine at DRAWROOM. Fills the buffer at 24064 with attribute
+; Used by the routine at DRAWROOM. Fills the buffer at 24064 with offset
 ; bytes for the background, floor, wall, nasty, conveyor and ramp tiles in the
 ; current room.
 ROOMATTRS:
-  LD IX,ATTR1             ; Point IX at the first byte of the attribute buffer
+  LD DE,ATTR1             ; Point DE at the first byte of the attribute buffer
                           ; at 24064
-; The following loop copies the attribute bytes for the background, floor, wall
-; and nasty tiles into the buffer at 24064.
 ROOMATTRS_0:
   LD A,(HL)               ; Pick up a room layout byte
   RLCA                    ; Move bits 6 and 7 into bits 0 and 1
@@ -1453,6 +1460,7 @@ ROOMATTRS_0:
   LD A,L                  ; Have we processed all 128 room layout bytes yet?
   AND $80
   JR Z,ROOMATTRS_0        ; If not, jump back to process the next one
+
 ; Next consider the conveyor tiles (if any).
   LD A,(CONVLEN)          ; Pick up the length of the conveyor from CONVLEN
   OR A                    ; Is there a conveyor in the room?
@@ -1460,12 +1468,11 @@ ROOMATTRS_0:
   LD HL,(CONVLOC)         ; Pick up the address of the conveyor's location in
                           ; the attribute buffer at 24064 from CONVLOC
   LD B,A                  ; B will count the conveyor tiles
-  LD A,(CONVEYOR)         ; Pick up the attribute byte for the conveyor tile
-                          ; from CONVEYOR
 ROOMATTRS_1:
-  LD (HL),A               ; Copy the attribute bytes for the conveyor tiles
+  LD (HL),CONVEYOR%$100   ; Copy the attribute bytes for the conveyor tiles
   INC HL                  ; into the buffer at 24064
   DJNZ ROOMATTRS_1
+
 ; And finally consider the ramp tiles (if any).
 ROOMATTRS_2:
   LD A,(RAMPLEN)          ; Pick up the length of the ramp from RAMPLEN
@@ -1482,10 +1489,8 @@ ROOMATTRS_2:
   LD D,$FF
   LD A,(RAMPLEN)          ; Pick up the length of the ramp from RAMPLEN
   LD B,A                  ; B will count the ramp tiles
-  LD A,(RAMP)             ; Pick up the attribute byte for the ramp tile from
-                          ; RAMP
 ROOMATTRS_3:
-  LD (HL),A               ; Copy the attribute bytes for the ramp tiles into
+  LD (HL),RAMP%$100       ; Copy the attribute bytes for the ramp tiles into
   ADD HL,DE               ; the buffer at 24064
   DJNZ ROOMATTRS_3
   RET
@@ -1507,12 +1512,8 @@ ROOMATTR:
   RLCA
   ADD A,C
   ADD A,BACKGROUND%$100
-  LD E,A                  ; Point DE at the attribute byte for the background,
-  LD D,BACKGROUND/$100    ; floor, wall or nasty tile (see BACKGROUND)
-  LD A,(DE)               ; Copy the attribute byte into the buffer at 24064
-  LD (IX+$00),A
-  INC IX                  ; Move IX along to the next byte in the attribute
-                          ; buffer
+  LD (DE),A
+  INC DE                  ; Move DE along to the next byte
   RET
 
 ; Move Willy (1)
@@ -2473,7 +2474,7 @@ DRAWTHINGS_13:
   ADD A,(IX+$01)          ; of the rope animation table at ROPEANIM
   LD L,A
   SET 7,L
-  LD H,$83
+  LD H,ROPEANIM/$100
   LD E,(HL)               ; Add its value to IY; now IY points at the entry in
   LD D,$00                ; the screen buffer address lookup table at SBUFADDRS
   ADD IY,DE               ; that corresponds to the next segment of rope to
@@ -2826,53 +2827,36 @@ ROOMBELOW_0:
 ;
 ; Used by the routine at MAINLOOP.
 MVCONVEYOR:
-  LD HL,(CONVLOC)         ; Pick up the address of the conveyor's location in
-                          ; the attribute buffer at 24064 from CONVLOC
-  LD A,H                  ; Point DE and HL at the location of the left end of
-  AND $01                 ; the conveyor in the screen buffer at 28672
-  RLCA
-  RLCA
-  RLCA
-  ADD A,DISP1/$100
-  LD H,A
-  LD E,L
-  LD D,H
-  LD A,(CONVLEN)          ; Pick up the length of the conveyor from CONVLEN
-  OR A                    ; Is there a conveyor in the room?
-  RET Z                   ; Return if not
-  LD B,A                  ; B will count the conveyor tiles
+  LD HL,CONVEYOR+1        ; Address of the conveyor block description
   LD A,(CONVDIR)          ; Pick up the direction of the conveyor from CONVDIR
                           ; (0=left, 1=right)
   OR A                    ; Is the conveyor moving right?
   JR NZ,MVCONVEYOR_1      ; Jump if so
 ; The conveyor is moving left.
   LD A,(HL)               ; Copy the first pixel row of the conveyor tile to A
-  RLC A                   ; Rotate it left twice
-  RLC A
-  INC H                   ; Point HL at the third pixel row of the conveyor
-  INC H                   ; tile
-  LD C,(HL)               ; Copy this pixel row to C
-  RRC C                   ; Rotate it right twice
-  RRC C
-MVCONVEYOR_0:
-  LD (DE),A               ; Update the first and third pixel rows of every
-  LD (HL),C               ; conveyor tile in the screen buffer at 28672
-  INC L
-  INC E
-  DJNZ MVCONVEYOR_0
+  RLCA                    ; Rotate it left twice
+  RLCA
+  LD (HL),A
+  INC L                   ; Point HL at the third pixel row of the conveyor
+  INC L                   ; tile
+  LD A,(HL)               ; Copy this pixel row to C
+  RRCA                    ; Rotate it right twice
+  RRCA
+  LD (HL),A
   RET
 ; The conveyor is moving right.
 MVCONVEYOR_1:
   LD A,(HL)               ; Copy the first pixel row of the conveyor tile to A
-  RRC A                   ; Rotate it right twice
-  RRC A
-  INC H                   ; Point HL at the third pixel row of the conveyor
-  INC H                   ; tile
-  LD C,(HL)               ; Copy this pixel row to C
-  RLC C                   ; Rotate it left twice
-  RLC C
-  JR MVCONVEYOR_0         ; Jump back to update the first and third pixel rows
-                          ; of every conveyor tile
+  RRCA                   ; Rotate it right twice
+  RRCA
+  LD (HL),A
+  INC L                   ; Point HL at the third pixel row of the conveyor
+  INC L                   ; tile
+  LD A,(HL)               ; Copy this pixel row to C
+  RLCA                   ; Rotate it left twice
+  RLCA
+  LD (HL),A
+  RET
 
 ; Deal with special rooms (Master Bedroom, The Bathroom)
 ;
@@ -3276,7 +3260,7 @@ INTROSOUND_2:
   RET
 
 ; Unused
-  DEFS $B600-$
+  DEFS $C600-$
 
 ; Screen buffer address lookup table
 ;
@@ -3517,7 +3501,7 @@ ATTRSLOWER:
   DEFB $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
 
 ; Unused
-  DEFS $BE40-$
+  DEFS $CE40-$
 
 ; Foot/barrel graphic data
 ;
