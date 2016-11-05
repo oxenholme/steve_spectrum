@@ -312,7 +312,28 @@ MSG_INTRO:
 ;
 ; Used by the routine at STARTGAME.
 MSG_STATUS:
-  DEFM "Items collected 000 Time 00:00 m"
+  DEFM "Items collected "
+
+; Number of items collected
+;
+; Initialised by the routine at TITLESCREEN, printed by the routine at
+; MAINLOOP, and updated by the routine at DRAWITEMS.
+MSG_ITEMS:
+  DEFM "000"
+  DEFM " Time "
+
+; Current time
+;
+; Initialised by the routine at STARTGAME, and printed and updated by the
+; routine at MAINLOOP.
+MSG_CURTIME:
+  DEFM " 7:00am"
+
+; ' 7:00a'
+;
+; Copied by the routine at STARTGAME to MSG_CURTIME.
+MSG_7AM:
+  DEFM " 7:00a"
 
 ; 'Game'
 ;
@@ -325,26 +346,6 @@ MSG_GAME:
 ; Used by the routine at GAMEOVER.
 MSG_OVER:
   DEFM "Over"
-
-; Number of items collected
-;
-; Initialised by the routine at TITLESCREEN, printed by the routine at
-; MAINLOOP, and updated by the routine at DRAWITEMS.
-MSG_ITEMS:
-  DEFM "000"
-
-; Current time
-;
-; Initialised by the routine at STARTGAME, and printed and updated by the
-; routine at MAINLOOP.
-MSG_CURTIME:
-  DEFM " 7:00a"
-
-; ' 7:00a'
-;
-; Copied by the routine at STARTGAME to MSG_CURTIME.
-MSG_7AM:
-  DEFM " 7:00a"
 
 ; Minute counter
 ;
@@ -521,7 +522,7 @@ MUSICFLAGS:
 ;
 ; Checked by the routine at MAINLOOP, and updated by the routine at ENDPAUSE.
 TELEPORT:
-  DEFB $00
+  DEFB $0A
 
 ; Temporary variable
 ;
@@ -913,18 +914,10 @@ MAINLOOP_0:
   LD (HL),A               ; head down it; this has the effect of moving Willy
                           ; at twice his normal speed as he makes his way to
                           ; the toilet (using animation frames 2 and 0)
-  LD IX,MSG_CURTIME       ; Print the current time (see MSG_CURTIME) at (19,25)
-  LD DE,$5079
-  LD C,$06
-  CALL PRINTMSG
-  LD IX,MSG_ITEMS         ; Print the number of items collected (see MSG_ITEMS)
-  LD DE,$5070             ; at (19,16)
-  LD C,$03
-  CALL PRINTMSG
   LD A,(TICKS)            ; Increment the minute counter at TICKS
   INC A
   LD (TICKS),A
-  JR NZ,MAINLOOP_3        ; Jump unless the minute counter has ticked over to 0
+  JR NZ,MAINLOOP_4        ; Jump unless the minute counter has ticked over to 0
 ; A minute of game time has passed. Update the game clock accordingly.
   LD IX,MSG_CURTIME       ; Point IX at the current time at MSG_CURTIME
   INC (IX+$04)            ; Increment the units digit of the minute
@@ -958,8 +951,13 @@ MAINLOOP_2:
   JR NZ,MAINLOOP_3        ; Jump if not
   LD (IX+$01),$30         ; Set the units digit of the hour to '0'
   LD (IX+$00),$31         ; Set the tens digit of the hour to '1'
-; Now check whether any non-movement keys are being pressed.
 MAINLOOP_3:
+  LD IX,MSG_CURTIME       ; Print the current time (see MSG_CURTIME) at (19,25)
+  LD DE,$5079
+  LD C,$06
+  CALL PRINTMSG
+; Now check whether any non-movement keys are being pressed.
+MAINLOOP_4:
   LD BC,$FEFE             ; Read keys SHIFT-Z-X-C-V
   IN A,(C)
   LD E,A                  ; Save the result in E
@@ -1104,18 +1102,19 @@ ENDPAUSE_4:
   JR NZ,ENDPAUSE_3
 ; Here we check the teleport keys.
 ENDPAUSE_5:
+  LD A,(TELEPORT)         ; Pick up the WRITETYPER key counter from TELEPORT
+  CP $0A                  ; Has WRITETYPER been keyed in yet?
+  JP NZ,ENDPAUSE_6        ; Jump if not
   LD BC,$EFFE             ; Read keys 6-7-8-9-0
   IN A,(C)
   BIT 1,A                 ; Is '9' (the activator key) being pressed?
   JP NZ,ENDPAUSE_6        ; Jump if not
-  AND $10                 ; Keep only bit 4 (corresponding to the '6' key),
-  XOR $10                 ; flip it, and move it into bit 5
+  AND $18                 ; Keep only bits 3 and 4 (the '6' and '7' keys),
+  XOR $18                 ; flip them, and move then into bits 5 and 6
+  RLCA
   RLCA
   LD D,A                  ; Now bit 5 of D is set if '6' is being pressed
-  LD A,(TELEPORT)         ; Pick up the WRITETYPER key counter from TELEPORT
-  CP $0A                  ; Has WRITETYPER been keyed in yet?
-  JP NZ,ENDPAUSE_6        ; Jump if not
-  LD BC,$F7FE             ; Read keys 1-2-3-4-5
+  LD B,$F7                ; Read keys 1-2-3-4-5
   IN A,(C)
   CPL                     ; Keep only bits 0-4 and flip them
   AND $1F
@@ -1607,8 +1606,6 @@ MOVEWILLY_3:
   JR Z,MOVEWILLY_4        ; Jump if so
   INC HL                  ; Point HL at the right-hand cell below Willy's
                           ; sprite
-  LD A,(NASTY)            ; Pick up the attribute byte of the nasty tile for
-                          ; the current room from NASTY (again, redundantly)
   CP (HL)                 ; Does the right-hand cell below Willy's sprite
                           ; contain a nasty?
   JR Z,MOVEWILLY_4        ; Jump if so
@@ -1897,11 +1894,10 @@ MOVEWILLY3:
 MOVEWILLY3_0:
   LD A,(AIRBORNE)         ; Pick up the airborne status indicator from AIRBORNE
   LD BC,$0000             ; Prepare BC for later addition
-  CP $00                  ; Is Willy jumping?
+  OR A                    ; Is Willy jumping?
   JR NZ,MOVEWILLY3_1      ; Jump if so
   LD HL,(LOCATION)        ; Collect Willy's attribute buffer coordinates from
                           ; LOCATION
-  LD BC,$0000             ; Prepare BC for later addition (again, redundantly)
   LD A,(RAMPDIR)          ; Pick up the direction byte of the ramp definition
                           ; for the current room from RAMPDIR
   DEC A                   ; Now A=31 if the ramp goes up to the left, or 65 if
@@ -2465,7 +2461,6 @@ DRAWTHINGS_12:
                           ; moves
   POP HL                  ; Restore the screen buffer address of the segment of
                           ; rope under consideration to HL
-  JR DRAWTHINGS_13        ; Make a redundant jump to the next instruction
 DRAWTHINGS_13:
   LD A,(IX+$05)           ; Draw a pixel of the rope to the screen buffer at
   OR (HL)                 ; 24576
@@ -2563,7 +2558,6 @@ DRAWTHINGS_21:
                           ; falling
   XOR A                   ; Initialise the airborne status indicator at
   LD (AIRBORNE),A         ; AIRBORNE
-  JR DRAWTHINGS_22        ; Make a redundant jump to the next instruction
 ; The current entity definition has been dealt with. Time for the next one.
 DRAWTHINGS_22:
   LD DE,$0008             ; Point IX at the first byte of the next entity
@@ -2655,6 +2649,12 @@ DRAWITEMS_4:
   LD A,C
   LD (DE),A
   DEC H
+  PUSH HL
+  LD IX,MSG_ITEMS         ; Print the number of items collected (see MSG_ITEMS)
+  LD DE,$5070             ; at (19,16)
+  LD C,$03
+  CALL PRINTMSG
+  POP HL
   JR DRAWITEMS_0          ; Jump back to consider next item
 
 ; Willy is not touching this item, so draw it and cycle its INK colour.
