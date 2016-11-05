@@ -3619,7 +3619,7 @@ ENTITY2:
   DEFB $80                ; Initial pixel y-coordinate: 64
   DEFB $02                ; Initial pixel y-coordinate increment: 1 (moving
                           ; down)
-  DEFB $BF                ; Page containing the sprite graphic data: BF
+  DEFB GUARDIANS/$100+$14 ; Page containing the sprite graphic data: BF
   DEFB $50                ; Minimum pixel y-coordinate: 40
   DEFB $D0                ; Maximum pixel y-coordinate: 104
 ; The following entity definition (0x03) is used in The Security Guard, I'm
@@ -3636,7 +3636,7 @@ ENTITY3:
   DEFB $A0                ; Initial pixel y-coordinate: 80
   DEFB $04                ; Initial pixel y-coordinate increment: 2 (moving
                           ; down)
-  DEFB $BF                ; Page containing the sprite graphic data: BF
+  DEFB GUARDIANS/$100+$14 ; Page containing the sprite graphic data: BF
   DEFB $58                ; Minimum pixel y-coordinate: 44
   DEFB $D0                ; Maximum pixel y-coordinate: 104
 ; The following entity definition (0x04) is used in The Security Guard, Rescue
@@ -3653,7 +3653,7 @@ ENTITY4:
   DEFB $60                ; Initial pixel y-coordinate: 48
   DEFB $08                ; Initial pixel y-coordinate increment: 4 (moving
                           ; down)
-  DEFB $BF                ; Page containing the sprite graphic data: BF
+  DEFB GUARDIANS/$100+$14 ; Page containing the sprite graphic data: BF
   DEFB $60                ; Minimum pixel y-coordinate: 48
   DEFB $C0                ; Maximum pixel y-coordinate: 96
 ; The following entity definition (0x05) is used in I'm sure I've seen this
@@ -3670,7 +3670,7 @@ ENTITY5:
   DEFB $40                ; Initial pixel y-coordinate: 32
   DEFB $0C                ; Initial pixel y-coordinate increment: 6 (moving
                           ; down)
-  DEFB $BF                ; Page containing the sprite graphic data: BF
+  DEFB GUARDIANS/$100+$14 ; Page containing the sprite graphic data: BF
   DEFB $40                ; Minimum pixel y-coordinate: 32
   DEFB $C0                ; Maximum pixel y-coordinate: 96
 ; The following entity definition (0x06) is used in At the Foot of the
@@ -3687,7 +3687,7 @@ ENTITY6:
   DEFB $40                ; Initial pixel y-coordinate: 32
   DEFB $0A                ; Initial pixel y-coordinate increment: 5 (moving
                           ; down)
-  DEFB $BF                ; Page containing the sprite graphic data: BF
+  DEFB GUARDIANS/$100+$14 ; Page containing the sprite graphic data: BF
   DEFB $40                ; Minimum pixel y-coordinate: 32
   DEFB $B0                ; Maximum pixel y-coordinate: 88
 ; The following entity definition (0x07) is used in At the Foot of the MegaTree
@@ -3704,7 +3704,7 @@ ENTITY7:
   DEFB $64                ; Initial pixel y-coordinate: 50
   DEFB $F4                ; Initial pixel y-coordinate increment: -6 (moving
                           ; up)
-  DEFB $BF                ; Page containing the sprite graphic data: BF
+  DEFB GUARDIANS/$100+$14 ; Page containing the sprite graphic data: BF
   DEFB $20                ; Minimum pixel y-coordinate: 16
   DEFB $A0                ; Maximum pixel y-coordinate: 80
 ; The following entity definition (0x08) is used in At the Foot of the
@@ -3721,7 +3721,7 @@ ENTITY8:
   DEFB $80                ; Initial pixel y-coordinate: 64
   DEFB $06                ; Initial pixel y-coordinate increment: 3 (moving
                           ; down)
-  DEFB $BF                ; Page containing the sprite graphic data: BF
+  DEFB GUARDIANS/$100+$14 ; Page containing the sprite graphic data: BF
   DEFB $26                ; Minimum pixel y-coordinate: 19
   DEFB $B0                ; Maximum pixel y-coordinate: 88
 ; The following entity definition (0x09) is used in Inside the MegaTrunk and On
@@ -3738,7 +3738,7 @@ ENTITY9:
   DEFB $A0                ; Initial pixel y-coordinate: 80
   DEFB $04                ; Initial pixel y-coordinate increment: 2 (moving
                           ; down)
-  DEFB $BF                ; Page containing the sprite graphic data: BF
+  DEFB GUARDIANS/$100+$14 ; Page containing the sprite graphic data: BF
   DEFB $80                ; Minimum pixel y-coordinate: 64
   DEFB $E0                ; Maximum pixel y-coordinate: 112
 ; The following entity definition (0x0A) is used in The Off Licence.
@@ -3754,7 +3754,7 @@ ENTITY10:
   DEFB $60                ; Initial pixel y-coordinate: 48
   DEFB $08                ; Initial pixel y-coordinate increment: 4 (moving
                           ; down)
-  DEFB $BE                ; Page containing the sprite graphic data: BE
+  DEFB GUARDIANS/$100+$13 ; Page containing the sprite graphic data: BE
   DEFB $10                ; Minimum pixel y-coordinate: 8
   DEFB $D0                ; Maximum pixel y-coordinate: 104
 ; The following entity definition (0x0B) is used in Dr Jones will never believe
@@ -3771,7 +3771,7 @@ ENTITY11:
   DEFB $C0                ; Initial pixel y-coordinate: 96
   DEFB $F6                ; Initial pixel y-coordinate increment: -5 (moving
                           ; up)
-  DEFB $BF                ; Page containing the sprite graphic data: BF
+  DEFB GUARDIANS/$100+$14 ; Page containing the sprite graphic data: BF
   DEFB $70                ; Minimum pixel y-coordinate: 56
   DEFB $C0                ; Maximum pixel y-coordinate: 96
 ; The following entity definition (0x0C) is used in The Off Licence.
@@ -3786,7 +3786,7 @@ ENTITY12:
                           ; entity specification in the room definition)
   DEFB $70                ; Pixel y-coordinate: 56
   DEFB $01                ; Unused
-  DEFB $BE                ; Page containing the sprite graphic data: BE
+  DEFB GUARDIANS/$100+$13 ; Page containing the sprite graphic data: BE
   DEFB $13                ; Minimum x-coordinate
   DEFB $1D                ; Maximum x-coordinate
 ; The following entity definition (0x0D) is used in Rescue Esmerelda, I'm sure
@@ -3802,7 +3802,7 @@ ENTITY13:
                           ; entity specification in the room definition)
   DEFB $40                ; Pixel y-coordinate: 32
   DEFB $00                ; Unused
-  DEFB $BC                ; Page containing the sprite graphic data: BC
+  DEFB GUARDIANS/$100+$11 ; Page containing the sprite graphic data: BC
   DEFB $00                ; Minimum x-coordinate
   DEFB $09                ; Maximum x-coordinate
 ; The following entity definition (0x0E) is used in The Bridge.
@@ -3818,7 +3818,7 @@ ENTITY14:
   DEFB $30                ; Initial pixel y-coordinate: 24
   DEFB $0C                ; Initial pixel y-coordinate increment: 6 (moving
                           ; down)
-  DEFB $B9                ; Page containing the sprite graphic data: B9
+  DEFB GUARDIANS/$100+$0E ; Page containing the sprite graphic data: B9
   DEFB $00                ; Minimum pixel y-coordinate: 0
   DEFB $C0                ; Maximum pixel y-coordinate: 96
 ; The following entity definition (0x0F) is used in Rescue Esmerelda.
@@ -3834,7 +3834,7 @@ ENTITY15:
   DEFB $10                ; Initial pixel y-coordinate: 8
   DEFB $04                ; Initial pixel y-coordinate increment: 2 (moving
                           ; down)
-  DEFB $B0                ; Page containing the sprite graphic data: B0
+  DEFB GUARDIANS/$100+$05 ; Page containing the sprite graphic data: B0
   DEFB $00                ; Minimum pixel y-coordinate: 0
   DEFB $20                ; Maximum pixel y-coordinate: 16
 ; The following entity definition (0x10) is used in Entrance to Hades, The
@@ -3850,7 +3850,7 @@ ENTITY16:
   DEFB $60                ; Initial pixel y-coordinate: 48
   DEFB $02                ; Initial pixel y-coordinate increment: 1 (moving
                           ; down)
-  DEFB $BA                ; Page containing the sprite graphic data: BA
+  DEFB GUARDIANS/$100+$0F ; Page containing the sprite graphic data: BA
   DEFB $00                ; Minimum pixel y-coordinate: 0
   DEFB $B0                ; Maximum pixel y-coordinate: 88
 ; The following entity definition (0x11) is used in Entrance to Hades, The
@@ -3866,7 +3866,7 @@ ENTITY17:
   DEFB $60                ; Initial pixel y-coordinate: 48
   DEFB $02                ; Initial pixel y-coordinate increment: 1 (moving
                           ; down)
-  DEFB $BA                ; Page containing the sprite graphic data: BA
+  DEFB GUARDIANS/$100+$0F ; Page containing the sprite graphic data: BA
   DEFB $00                ; Minimum pixel y-coordinate: 0
   DEFB $B0                ; Maximum pixel y-coordinate: 88
 ; The following entity definition (0x12) is used in Entrance to Hades, The
@@ -3883,7 +3883,7 @@ ENTITY18:
   DEFB $80                ; Initial pixel y-coordinate: 64
   DEFB $02                ; Initial pixel y-coordinate increment: 1 (moving
                           ; down)
-  DEFB $BA                ; Page containing the sprite graphic data: BA
+  DEFB GUARDIANS/$100+$0F ; Page containing the sprite graphic data: BA
   DEFB $20                ; Minimum pixel y-coordinate: 16
   DEFB $D0                ; Maximum pixel y-coordinate: 104
 ; The following entity definition (0x13) is used in Ballroom East and Top
@@ -3899,7 +3899,7 @@ ENTITY19:
   DEFB $20                ; Initial pixel y-coordinate: 16
   DEFB $02                ; Initial pixel y-coordinate increment: 1 (moving
                           ; down)
-  DEFB $9C                ; Page containing the sprite graphic data: 9C
+  DEFB MARIA0/$100        ; Page containing the sprite graphic data: 9C
   DEFB $20                ; Minimum pixel y-coordinate: 16
   DEFB $60                ; Maximum pixel y-coordinate: 48
 ; The following entity definition (0x14) is used in The Bridge and West  Wing.
@@ -3914,7 +3914,7 @@ ENTITY20:
                           ; entity specification in the room definition)
   DEFB $A0                ; Pixel y-coordinate: 80
   DEFB $00                ; Unused
-  DEFB $BC                ; Page containing the sprite graphic data: BC
+  DEFB GUARDIANS/$100+$11 ; Page containing the sprite graphic data: BC
   DEFB $00                ; Minimum x-coordinate
   DEFB $0A                ; Maximum x-coordinate
 ; The following entity definition (0x15) is used in The Bridge, The Drive and
@@ -3930,7 +3930,7 @@ ENTITY21:
                           ; entity specification in the room definition)
   DEFB $A0                ; Pixel y-coordinate: 80
   DEFB $00                ; Unused
-  DEFB $BC                ; Page containing the sprite graphic data: BC
+  DEFB GUARDIANS/$100+$11 ; Page containing the sprite graphic data: BC
   DEFB $0E                ; Minimum x-coordinate
   DEFB $1D                ; Maximum x-coordinate
 ; The following entity definition (0x16) is used in The Drive and Inside the
@@ -3946,7 +3946,7 @@ ENTITY22:
                           ; entity specification in the room definition)
   DEFB $B0                ; Pixel y-coordinate: 88
   DEFB $01                ; Unused
-  DEFB $BC                ; Page containing the sprite graphic data: BC
+  DEFB GUARDIANS/$100+$11 ; Page containing the sprite graphic data: BC
   DEFB $10                ; Minimum x-coordinate
   DEFB $1D                ; Maximum x-coordinate
 ; The following entity definition (0x17) is used in The Drive.
@@ -3961,7 +3961,7 @@ ENTITY23:
                           ; entity specification in the room definition)
   DEFB $80                ; Pixel y-coordinate: 64
   DEFB $00                ; Unused
-  DEFB $BC                ; Page containing the sprite graphic data: BC
+  DEFB GUARDIANS/$100+$11 ; Page containing the sprite graphic data: BC
   DEFB $05                ; Minimum x-coordinate
   DEFB $1D                ; Maximum x-coordinate
 ; The following entity definition (0x18) is used in The Drive, Inside the
@@ -3977,7 +3977,7 @@ ENTITY24:
                           ; entity specification in the room definition)
   DEFB $50                ; Pixel y-coordinate: 40
   DEFB $00                ; Unused
-  DEFB $BC                ; Page containing the sprite graphic data: BC
+  DEFB GUARDIANS/$100+$11 ; Page containing the sprite graphic data: BC
   DEFB $00                ; Minimum x-coordinate
   DEFB $0A                ; Maximum x-coordinate
 ; The following entity definition (0x19) is used in Out on a limb.
@@ -3992,7 +3992,7 @@ ENTITY25:
                           ; entity specification in the room definition)
   DEFB $70                ; Pixel y-coordinate: 56
   DEFB $00                ; Unused
-  DEFB $BC                ; Page containing the sprite graphic data: BC
+  DEFB GUARDIANS/$100+$11 ; Page containing the sprite graphic data: BC
   DEFB $0E                ; Minimum x-coordinate
   DEFB $17                ; Maximum x-coordinate
 ; The following entity definition (0x1A) is used in Under the MegaTree, The
@@ -4008,7 +4008,7 @@ ENTITY26:
                           ; entity specification in the room definition)
   DEFB $30                ; Pixel y-coordinate: 24
   DEFB $00                ; Unused
-  DEFB $B6                ; Page containing the sprite graphic data: B6
+  DEFB GUARDIANS/$100+$0B ; Page containing the sprite graphic data: B6
   DEFB $05                ; Minimum x-coordinate
   DEFB $1E                ; Maximum x-coordinate
 ; The following entity definition (0x1B) is used in On a Branch Over the Drive,
@@ -4025,7 +4025,7 @@ ENTITY27:
   DEFB $90                ; Initial pixel y-coordinate: 72
   DEFB $FC                ; Initial pixel y-coordinate increment: -2 (moving
                           ; up)
-  DEFB $B2                ; Page containing the sprite graphic data: B2
+  DEFB GUARDIANS/$100+$07 ; Page containing the sprite graphic data: B2
   DEFB $80                ; Minimum pixel y-coordinate: 64
   DEFB $D0                ; Maximum pixel y-coordinate: 104
 ; The following entity definition (0x1C) is used in Under the Drive and West
@@ -4041,7 +4041,7 @@ ENTITY28:
                           ; entity specification in the room definition)
   DEFB $B0                ; Pixel y-coordinate: 88
   DEFB $00                ; Unused
-  DEFB $BC                ; Page containing the sprite graphic data: BC
+  DEFB GUARDIANS/$100+$11 ; Page containing the sprite graphic data: BC
   DEFB $0C                ; Minimum x-coordinate
   DEFB $1D                ; Maximum x-coordinate
 ; The following entity definition (0x1D) is used in On top of the house, Under
@@ -4058,7 +4058,7 @@ ENTITY29:
   DEFB $30                ; Initial pixel y-coordinate: 24
   DEFB $04                ; Initial pixel y-coordinate increment: 2 (moving
                           ; down)
-  DEFB $B2                ; Page containing the sprite graphic data: B2
+  DEFB GUARDIANS/$100+$07 ; Page containing the sprite graphic data: B2
   DEFB $00                ; Minimum pixel y-coordinate: 0
   DEFB $80                ; Maximum pixel y-coordinate: 64
 ; The following entity definition (0x1E) is used in Tree Root and West Bedroom.
@@ -4074,7 +4074,7 @@ ENTITY30:
   DEFB $40                ; Initial pixel y-coordinate: 32
   DEFB $FC                ; Initial pixel y-coordinate increment: -2 (moving
                           ; up)
-  DEFB $AD                ; Page containing the sprite graphic data: AD
+  DEFB GUARDIANS/$100+$02 ; Page containing the sprite graphic data: AD
   DEFB $00                ; Minimum pixel y-coordinate: 0
   DEFB $80                ; Maximum pixel y-coordinate: 64
 ; The following entity definition (0x1F) is used in Tree Root.
@@ -4090,7 +4090,7 @@ ENTITY31:
   DEFB $90                ; Initial pixel y-coordinate: 72
   DEFB $04                ; Initial pixel y-coordinate increment: 2 (moving
                           ; down)
-  DEFB $B7                ; Page containing the sprite graphic data: B7
+  DEFB GUARDIANS/$100+$0C ; Page containing the sprite graphic data: B7
   DEFB $40                ; Minimum pixel y-coordinate: 32
   DEFB $A0                ; Maximum pixel y-coordinate: 80
 ; The following entity definition (0x20) is used in Under the MegaTree.
@@ -4105,7 +4105,7 @@ ENTITY32:
                           ; entity specification in the room definition)
   DEFB $D0                ; Pixel y-coordinate: 104
   DEFB $01                ; Unused
-  DEFB $B8                ; Page containing the sprite graphic data: B8
+  DEFB GUARDIANS/$100+$0D ; Page containing the sprite graphic data: B8
   DEFB $00                ; Minimum x-coordinate
   DEFB $1E                ; Maximum x-coordinate
 ; The following entity definition (0x21) is used in Ballroom West.
@@ -4120,7 +4120,7 @@ ENTITY33:
                           ; entity specification in the room definition)
   DEFB $B0                ; Pixel y-coordinate: 88
   DEFB $00                ; Unused
-  DEFB $B8                ; Page containing the sprite graphic data: B8
+  DEFB GUARDIANS/$100+$0D ; Page containing the sprite graphic data: B8
   DEFB $10                ; Minimum x-coordinate
   DEFB $1A                ; Maximum x-coordinate
 ; The following entity definition (0x22) is used in On the Roof.
@@ -4135,7 +4135,7 @@ ENTITY34:
                           ; entity specification in the room definition)
   DEFB $D0                ; Pixel y-coordinate: 104
   DEFB $01                ; Unused
-  DEFB $B8                ; Page containing the sprite graphic data: B8
+  DEFB GUARDIANS/$100+$0D ; Page containing the sprite graphic data: B8
   DEFB $0E                ; Minimum x-coordinate
   DEFB $18                ; Maximum x-coordinate
 ; The following entity definition (0x23) is used in Tree Root.
@@ -4150,7 +4150,7 @@ ENTITY35:
                           ; entity specification in the room definition)
   DEFB $90                ; Pixel y-coordinate: 72
   DEFB $00                ; Unused
-  DEFB $B8                ; Page containing the sprite graphic data: B8
+  DEFB GUARDIANS/$100+$0D ; Page containing the sprite graphic data: B8
   DEFB $0F                ; Minimum x-coordinate
   DEFB $17                ; Maximum x-coordinate
 ; The following entity definition (0x24) is used in The Drive, Top Landing and
@@ -4166,7 +4166,7 @@ ENTITY36:
                           ; entity specification in the room definition)
   DEFB $D0                ; Pixel y-coordinate: 104
   DEFB $00                ; Unused
-  DEFB $AF                ; Page containing the sprite graphic data: AF
+  DEFB GUARDIANS/$100+$04 ; Page containing the sprite graphic data: AF
   DEFB $0A                ; Minimum x-coordinate
   DEFB $1E                ; Maximum x-coordinate
 ; The following entity definition (0x25) is used in Priests' Hole.
@@ -4181,7 +4181,7 @@ ENTITY37:
                           ; entity specification in the room definition)
   DEFB $A0                ; Pixel y-coordinate: 80
   DEFB $00                ; Unused
-  DEFB $BC                ; Page containing the sprite graphic data: BC
+  DEFB GUARDIANS/$100+$11 ; Page containing the sprite graphic data: BC
   DEFB $08                ; Minimum x-coordinate
   DEFB $18                ; Maximum x-coordinate
 ; The following entity definition (0x26) is used in Halfway up the East Wall.
@@ -4196,7 +4196,7 @@ ENTITY38:
                           ; entity specification in the room definition)
   DEFB $60                ; Pixel y-coordinate: 48
   DEFB $00                ; Unused
-  DEFB $AE                ; Page containing the sprite graphic data: AE
+  DEFB GUARDIANS/$100+$03 ; Page containing the sprite graphic data: AE
   DEFB $02                ; Minimum x-coordinate
   DEFB $07                ; Maximum x-coordinate
 ; The following entity definition (0x27) is used in Cuckoo's Nest and Under the
@@ -4212,7 +4212,7 @@ ENTITY39:
                           ; entity specification in the room definition)
   DEFB $80                ; Pixel y-coordinate: 64
   DEFB $00                ; Unused
-  DEFB $AF                ; Page containing the sprite graphic data: AF
+  DEFB GUARDIANS/$100+$04 ; Page containing the sprite graphic data: AF
   DEFB $0C                ; Minimum x-coordinate
   DEFB $12                ; Maximum x-coordinate
 ; The following entity definition (0x28) is used in Ballroom East, Ballroom
@@ -4229,7 +4229,7 @@ ENTITY40:
   DEFB $70                ; Initial pixel y-coordinate: 56
   DEFB $04                ; Initial pixel y-coordinate increment: 2 (moving
                           ; down)
-  DEFB $BA                ; Page containing the sprite graphic data: BA
+  DEFB GUARDIANS/$100+$0F ; Page containing the sprite graphic data: BA
   DEFB $60                ; Minimum pixel y-coordinate: 48
   DEFB $C0                ; Maximum pixel y-coordinate: 96
 ; The following entity definition (0x29) is used in Ballroom East.
@@ -4245,7 +4245,7 @@ ENTITY41:
   DEFB $96                ; Initial pixel y-coordinate: 75
   DEFB $02                ; Initial pixel y-coordinate increment: 1 (moving
                           ; down)
-  DEFB $BA                ; Page containing the sprite graphic data: BA
+  DEFB GUARDIANS/$100+$0F ; Page containing the sprite graphic data: BA
   DEFB $90                ; Minimum pixel y-coordinate: 72
   DEFB $C0                ; Maximum pixel y-coordinate: 96
 ; The following entity definition (0x2A) is used in Under the MegaTree,
@@ -4262,7 +4262,7 @@ ENTITY42:
   DEFB $90                ; Initial pixel y-coordinate: 72
   DEFB $FA                ; Initial pixel y-coordinate increment: -3 (moving
                           ; up)
-  DEFB $BA                ; Page containing the sprite graphic data: BA
+  DEFB GUARDIANS/$100+$0F ; Page containing the sprite graphic data: BA
   DEFB $60                ; Minimum pixel y-coordinate: 48
   DEFB $AE                ; Maximum pixel y-coordinate: 87
 ; The following entity definition (0x2B) is not used.
@@ -4278,7 +4278,7 @@ ENTITY43:
   DEFB $B0                ; Initial pixel y-coordinate: 88
   DEFB $04                ; Initial pixel y-coordinate increment: 2 (moving
                           ; down)
-  DEFB $BA                ; Page containing the sprite graphic data: BA
+  DEFB GUARDIANS/$100+$0F ; Page containing the sprite graphic data: BA
   DEFB $90                ; Minimum pixel y-coordinate: 72
   DEFB $B8                ; Maximum pixel y-coordinate: 92
 ; The following entity definition (0x2C) is used in The Off Licence and Inside
@@ -4295,7 +4295,7 @@ ENTITY44:
   DEFB $40                ; Initial pixel y-coordinate: 32
   DEFB $04                ; Initial pixel y-coordinate increment: 2 (moving
                           ; down)
-  DEFB $BA                ; Page containing the sprite graphic data: BA
+  DEFB GUARDIANS/$100+$0F ; Page containing the sprite graphic data: BA
   DEFB $00                ; Minimum pixel y-coordinate: 0
   DEFB $D0                ; Maximum pixel y-coordinate: 104
 ; The following entity definition (0x2D) is used in Out on a limb and East Wall
@@ -4312,7 +4312,7 @@ ENTITY45:
   DEFB $B0                ; Initial pixel y-coordinate: 88
   DEFB $08                ; Initial pixel y-coordinate increment: 4 (moving
                           ; down)
-  DEFB $BA                ; Page containing the sprite graphic data: BA
+  DEFB GUARDIANS/$100+$0F ; Page containing the sprite graphic data: BA
   DEFB $00                ; Minimum pixel y-coordinate: 0
   DEFB $D0                ; Maximum pixel y-coordinate: 104
 ; The following entity definition (0x2E) is used in Tree Top.
@@ -4327,7 +4327,7 @@ ENTITY46:
                           ; entity specification in the room definition)
   DEFB $A0                ; Pixel y-coordinate: 80
   DEFB $00                ; Unused
-  DEFB $BB                ; Page containing the sprite graphic data: BB
+  DEFB GUARDIANS/$100+$10 ; Page containing the sprite graphic data: BB
   DEFB $00                ; Minimum x-coordinate
   DEFB $13                ; Maximum x-coordinate
 ; The following entity definition (0x2F) is used in Inside the MegaTrunk.
@@ -4342,7 +4342,7 @@ ENTITY47:
                           ; entity specification in the room definition)
   DEFB $30                ; Pixel y-coordinate: 24
   DEFB $00                ; Unused
-  DEFB $BB                ; Page containing the sprite graphic data: BB
+  DEFB GUARDIANS/$100+$10 ; Page containing the sprite graphic data: BB
   DEFB $11                ; Minimum x-coordinate
   DEFB $1E                ; Maximum x-coordinate
 ; The following entity definition (0x30) is used in The Kitchen and West of
@@ -4359,7 +4359,7 @@ ENTITY48:
   DEFB $40                ; Initial pixel y-coordinate: 32
   DEFB $06                ; Initial pixel y-coordinate increment: 3 (moving
                           ; down)
-  DEFB $B7                ; Page containing the sprite graphic data: B7
+  DEFB GUARDIANS/$100+$0C ; Page containing the sprite graphic data: B7
   DEFB $10                ; Minimum pixel y-coordinate: 8
   DEFB $D0                ; Maximum pixel y-coordinate: 104
 ; The following entity definition (0x31) is used in The Kitchen and West of
@@ -4376,7 +4376,7 @@ ENTITY49:
   DEFB $C0                ; Initial pixel y-coordinate: 96
   DEFB $04                ; Initial pixel y-coordinate increment: 2 (moving
                           ; down)
-  DEFB $B7                ; Page containing the sprite graphic data: B7
+  DEFB GUARDIANS/$100+$0C ; Page containing the sprite graphic data: B7
   DEFB $00                ; Minimum pixel y-coordinate: 0
   DEFB $D0                ; Maximum pixel y-coordinate: 104
 ; The following entity definition (0x32) is used in The Kitchen and West of
@@ -4393,7 +4393,7 @@ ENTITY50:
   DEFB $80                ; Initial pixel y-coordinate: 64
   DEFB $F8                ; Initial pixel y-coordinate increment: -4 (moving
                           ; up)
-  DEFB $B7                ; Page containing the sprite graphic data: B7
+  DEFB GUARDIANS/$100+$0C ; Page containing the sprite graphic data: B7
   DEFB $00                ; Minimum pixel y-coordinate: 0
   DEFB $D0                ; Maximum pixel y-coordinate: 104
 ; The following entity definition (0x33) is used in West Bedroom and Above the
@@ -4410,7 +4410,7 @@ ENTITY51:
   DEFB $30                ; Initial pixel y-coordinate: 24
   DEFB $02                ; Initial pixel y-coordinate increment: 1 (moving
                           ; down)
-  DEFB $B7                ; Page containing the sprite graphic data: B7
+  DEFB GUARDIANS/$100+$0C ; Page containing the sprite graphic data: B7
   DEFB $00                ; Minimum pixel y-coordinate: 0
   DEFB $A0                ; Maximum pixel y-coordinate: 80
 ; The following entity definition (0x34) is used in The Wine Cellar, Tool  Shed
@@ -4426,7 +4426,7 @@ ENTITY52:
                           ; entity specification in the room definition)
   DEFB $D0                ; Pixel y-coordinate: 104
   DEFB $00                ; Unused
-  DEFB $B5                ; Page containing the sprite graphic data: B5
+  DEFB GUARDIANS/$100+$0A ; Page containing the sprite graphic data: B5
   DEFB $07                ; Minimum x-coordinate
   DEFB $16                ; Maximum x-coordinate
 ; The following entity definition (0x35) is used in At the Foot of the MegaTree
@@ -4442,7 +4442,7 @@ ENTITY53:
                           ; entity specification in the room definition)
   DEFB $D0                ; Pixel y-coordinate: 104
   DEFB $00                ; Unused
-  DEFB $B5                ; Page containing the sprite graphic data: B5
+  DEFB GUARDIANS/$100+$0A ; Page containing the sprite graphic data: B5
   DEFB $04                ; Minimum x-coordinate
   DEFB $0E                ; Maximum x-coordinate
 ; The following entity definition (0x36) is used in Cold Store.
@@ -4457,7 +4457,7 @@ ENTITY54:
                           ; entity specification in the room definition)
   DEFB $D0                ; Pixel y-coordinate: 104
   DEFB $00                ; Unused
-  DEFB $BD                ; Page containing the sprite graphic data: BD
+  DEFB GUARDIANS/$100+$12 ; Page containing the sprite graphic data: BD
   DEFB $00                ; Minimum x-coordinate
   DEFB $18                ; Maximum x-coordinate
 ; The following entity definition (0x37) is used in Cold Store and Under the
@@ -4473,7 +4473,7 @@ ENTITY55:
                           ; entity specification in the room definition)
   DEFB $90                ; Pixel y-coordinate: 72
   DEFB $00                ; Unused
-  DEFB $BB                ; Page containing the sprite graphic data: BB
+  DEFB GUARDIANS/$100+$10 ; Page containing the sprite graphic data: BB
   DEFB $00                ; Minimum x-coordinate
   DEFB $05                ; Maximum x-coordinate
 ; The following entity definition (0x38) is used in Cold Store.
@@ -4488,7 +4488,7 @@ ENTITY56:
                           ; entity specification in the room definition)
   DEFB $60                ; Pixel y-coordinate: 48
   DEFB $00                ; Unused
-  DEFB $BD                ; Page containing the sprite graphic data: BD
+  DEFB GUARDIANS/$100+$12 ; Page containing the sprite graphic data: BD
   DEFB $00                ; Minimum x-coordinate
   DEFB $06                ; Maximum x-coordinate
 ; The following entity definition (0x39) is used in Cold Store.
@@ -4503,7 +4503,7 @@ ENTITY57:
                           ; entity specification in the room definition)
   DEFB $30                ; Pixel y-coordinate: 24
   DEFB $00                ; Unused
-  DEFB $BB                ; Page containing the sprite graphic data: BB
+  DEFB GUARDIANS/$100+$10 ; Page containing the sprite graphic data: BB
   DEFB $00                ; Minimum x-coordinate
   DEFB $09                ; Maximum x-coordinate
 ; The following entity definition (0x3A) is used in Top Landing.
@@ -4519,7 +4519,7 @@ ENTITY58:
   DEFB $40                ; Initial pixel y-coordinate: 32
   DEFB $04                ; Initial pixel y-coordinate increment: 2 (moving
                           ; down)
-  DEFB $AD                ; Page containing the sprite graphic data: AD
+  DEFB GUARDIANS/$100+$02 ; Page containing the sprite graphic data: AD
   DEFB $20                ; Minimum pixel y-coordinate: 16
   DEFB $D0                ; Maximum pixel y-coordinate: 104
 ; The following entity definition (0x3B) is used in The Bathroom.
@@ -4534,7 +4534,7 @@ ENTITY59:
                           ; entity specification in the room definition)
   DEFB $30                ; Pixel y-coordinate: 24
   DEFB $00                ; Unused
-  DEFB $B9                ; Page containing the sprite graphic data: B9
+  DEFB GUARDIANS/$100+$0E ; Page containing the sprite graphic data: B9
   DEFB $00                ; Minimum x-coordinate
   DEFB $1B                ; Maximum x-coordinate
 ; The following entity definition (0x3C) is used in Cuckoo's Nest, On a Branch
@@ -4566,7 +4566,7 @@ ENTITY61:
                           ; entity specification in the room definition)
   DEFB $50                ; Pixel y-coordinate: 40
   DEFB $00                ; Unused
-  DEFB $AD                ; Page containing the sprite graphic data: AD
+  DEFB GUARDIANS/$100+$02 ; Page containing the sprite graphic data: AD
   DEFB $10                ; Minimum x-coordinate
   DEFB $1E                ; Maximum x-coordinate
 ; The following entity definition (0x3E) is used in On a Branch Over the Drive.
@@ -4582,7 +4582,7 @@ ENTITY62:
   DEFB $60                ; Initial pixel y-coordinate: 48
   DEFB $02                ; Initial pixel y-coordinate increment: 1 (moving
                           ; down)
-  DEFB $B9                ; Page containing the sprite graphic data: B9
+  DEFB GUARDIANS/$100+$0E ; Page containing the sprite graphic data: B9
   DEFB $00                ; Minimum pixel y-coordinate: 0
   DEFB $70                ; Maximum pixel y-coordinate: 56
 ; The following entity definition (0x3F) is not used.
@@ -4599,7 +4599,7 @@ ENTITY64:
                           ; entity specification in the room definition)
   DEFB $30                ; Pixel y-coordinate: 24
   DEFB $00                ; Unused
-  DEFB $B4                ; Page containing the sprite graphic data: B4
+  DEFB GUARDIANS/$100+$09 ; Page containing the sprite graphic data: B4
   DEFB $00                ; Minimum x-coordinate
   DEFB $1B                ; Maximum x-coordinate
 ; The following entity definition (0x41) is used in The Wine Cellar.
@@ -4614,7 +4614,7 @@ ENTITY65:
                           ; entity specification in the room definition)
   DEFB $60                ; Pixel y-coordinate: 48
   DEFB $00                ; Unused
-  DEFB $B4                ; Page containing the sprite graphic data: B4
+  DEFB GUARDIANS/$100+$09 ; Page containing the sprite graphic data: B4
   DEFB $04                ; Minimum x-coordinate
   DEFB $1B                ; Maximum x-coordinate
 ; The following entity definition (0x42) is used in The Wine Cellar.
@@ -4629,7 +4629,7 @@ ENTITY66:
                           ; entity specification in the room definition)
   DEFB $90                ; Pixel y-coordinate: 72
   DEFB $00                ; Unused
-  DEFB $B4                ; Page containing the sprite graphic data: B4
+  DEFB GUARDIANS/$100+$09 ; Page containing the sprite graphic data: B4
   DEFB $02                ; Minimum x-coordinate
   DEFB $1B                ; Maximum x-coordinate
 ; The following entity definition (0x43) is used in First Landing.
@@ -4644,7 +4644,7 @@ ENTITY67:
                           ; entity specification in the room definition)
   DEFB $C0                ; Pixel y-coordinate: 96
   DEFB $00                ; Unused
-  DEFB $B4                ; Page containing the sprite graphic data: B4
+  DEFB GUARDIANS/$100+$09 ; Page containing the sprite graphic data: B4
   DEFB $18                ; Minimum x-coordinate
   DEFB $1E                ; Maximum x-coordinate
 ; The following entity definition (0x44) is used in Under the Drive.
@@ -4659,7 +4659,7 @@ ENTITY68:
                           ; entity specification in the room definition)
   DEFB $80                ; Pixel y-coordinate: 64
   DEFB $00                ; Unused
-  DEFB $AE                ; Page containing the sprite graphic data: AE
+  DEFB GUARDIANS/$100+$03 ; Page containing the sprite graphic data: AE
   DEFB $15                ; Minimum x-coordinate
   DEFB $1E                ; Maximum x-coordinate
 ; The following entity definition (0x45) is used in The Hall, Tree Top, I'm
@@ -4690,7 +4690,7 @@ ENTITY70:
   DEFB $40                ; Initial pixel y-coordinate: 32
   DEFB $FC                ; Initial pixel y-coordinate increment: -2 (moving
                           ; up)
-  DEFB $9C                ; Page containing the sprite graphic data: 9C
+  DEFB MARIA0/$100        ; Page containing the sprite graphic data: 9C
   DEFB $00                ; Minimum pixel y-coordinate: 0
   DEFB $A0                ; Maximum pixel y-coordinate: 80
 ; The following entity definition (0x47) is used in The Nightmare Room.
@@ -4706,7 +4706,7 @@ ENTITY71:
   DEFB $20                ; Initial pixel y-coordinate: 16
   DEFB $02                ; Initial pixel y-coordinate increment: 1 (moving
                           ; down)
-  DEFB $9C                ; Page containing the sprite graphic data: 9C
+  DEFB MARIA0/$100        ; Page containing the sprite graphic data: 9C
   DEFB $00                ; Minimum pixel y-coordinate: 0
   DEFB $D0                ; Maximum pixel y-coordinate: 104
 ; The following entity definition (0x48) is used in The Nightmare Room.
@@ -4721,7 +4721,7 @@ ENTITY72:
   DEFB $90                ; Initial pixel y-coordinate: 72
   DEFB $06                ; Initial pixel y-coordinate increment: 3 (moving
                           ; down)
-  DEFB $9C                ; Page containing the sprite graphic data: 9C
+  DEFB MARIA0/$100        ; Page containing the sprite graphic data: 9C
   DEFB $00                ; Minimum pixel y-coordinate: 0
   DEFB $C0                ; Maximum pixel y-coordinate: 96
 ; The following entity definition (0x49) is used in The Nightmare Room.
@@ -4737,7 +4737,7 @@ ENTITY73:
   DEFB $80                ; Initial pixel y-coordinate: 64
   DEFB $F8                ; Initial pixel y-coordinate increment: -4 (moving
                           ; up)
-  DEFB $9C                ; Page containing the sprite graphic data: 9C
+  DEFB MARIA0/$100        ; Page containing the sprite graphic data: 9C
   DEFB $10                ; Minimum pixel y-coordinate: 8
   DEFB $D0                ; Maximum pixel y-coordinate: 104
 ; The following entity definition (0x4A) is used in The Forgotten Abbey.
@@ -4752,7 +4752,7 @@ ENTITY74:
                           ; entity specification in the room definition)
   DEFB $50                ; Pixel y-coordinate: 40
   DEFB $00                ; Unused
-  DEFB $B4                ; Page containing the sprite graphic data: B4
+  DEFB GUARDIANS/$100+$09 ; Page containing the sprite graphic data: B4
   DEFB $04                ; Minimum x-coordinate
   DEFB $14                ; Maximum x-coordinate
 ; The following entity definition (0x4B) is used in The Forgotten Abbey.
@@ -4767,7 +4767,7 @@ ENTITY75:
                           ; entity specification in the room definition)
   DEFB $50                ; Pixel y-coordinate: 40
   DEFB $00                ; Unused
-  DEFB $B4                ; Page containing the sprite graphic data: B4
+  DEFB GUARDIANS/$100+$09 ; Page containing the sprite graphic data: B4
   DEFB $0C                ; Minimum x-coordinate
   DEFB $1C                ; Maximum x-coordinate
 ; The following entity definition (0x4C) is used in The Forgotten Abbey.
@@ -4782,7 +4782,7 @@ ENTITY76:
                           ; entity specification in the room definition)
   DEFB $90                ; Pixel y-coordinate: 72
   DEFB $00                ; Unused
-  DEFB $B4                ; Page containing the sprite graphic data: B4
+  DEFB GUARDIANS/$100+$09 ; Page containing the sprite graphic data: B4
   DEFB $09                ; Minimum x-coordinate
   DEFB $14                ; Maximum x-coordinate
 ; The following entity definition (0x4D) is used in The Forgotten Abbey.
@@ -4797,7 +4797,7 @@ ENTITY77:
                           ; entity specification in the room definition)
   DEFB $90                ; Pixel y-coordinate: 72
   DEFB $00                ; Unused
-  DEFB $B4                ; Page containing the sprite graphic data: B4
+  DEFB GUARDIANS/$100+$09 ; Page containing the sprite graphic data: B4
   DEFB $16                ; Minimum x-coordinate
   DEFB $1B                ; Maximum x-coordinate
 ; The following entity definition (0x4E) is used in The Forgotten Abbey and
@@ -4813,7 +4813,7 @@ ENTITY78:
                           ; entity specification in the room definition)
   DEFB $D0                ; Pixel y-coordinate: 104
   DEFB $00                ; Unused
-  DEFB $B4                ; Page containing the sprite graphic data: B4
+  DEFB GUARDIANS/$100+$09 ; Page containing the sprite graphic data: B4
   DEFB $05                ; Minimum x-coordinate
   DEFB $0C                ; Maximum x-coordinate
 ; The following entity definition (0x4F) is used in The Forgotten Abbey.
@@ -4828,7 +4828,7 @@ ENTITY79:
                           ; entity specification in the room definition)
   DEFB $D0                ; Pixel y-coordinate: 104
   DEFB $00                ; Unused
-  DEFB $B4                ; Page containing the sprite graphic data: B4
+  DEFB GUARDIANS/$100+$09 ; Page containing the sprite graphic data: B4
   DEFB $0B                ; Minimum x-coordinate
   DEFB $12                ; Maximum x-coordinate
 ; The following entity definition (0x50) is used in The Forgotten Abbey.
@@ -4843,7 +4843,7 @@ ENTITY80:
                           ; entity specification in the room definition)
   DEFB $D0                ; Pixel y-coordinate: 104
   DEFB $00                ; Unused
-  DEFB $B4                ; Page containing the sprite graphic data: B4
+  DEFB GUARDIANS/$100+$09 ; Page containing the sprite graphic data: B4
   DEFB $10                ; Minimum x-coordinate
   DEFB $17                ; Maximum x-coordinate
 ; The following entity definition (0x51) is used in The Forgotten Abbey.
@@ -4858,7 +4858,7 @@ ENTITY81:
                           ; entity specification in the room definition)
   DEFB $D0                ; Pixel y-coordinate: 104
   DEFB $00                ; Unused
-  DEFB $B4                ; Page containing the sprite graphic data: B4
+  DEFB GUARDIANS/$100+$09 ; Page containing the sprite graphic data: B4
   DEFB $17                ; Minimum x-coordinate
   DEFB $1E                ; Maximum x-coordinate
 ; The following entity definition (0x52) is used in The Attic.
@@ -4874,7 +4874,7 @@ ENTITY82:
   DEFB $84                ; Initial pixel y-coordinate: 66
   DEFB $04                ; Initial pixel y-coordinate increment: 2 (moving
                           ; down)
-  DEFB $B0                ; Page containing the sprite graphic data: B0
+  DEFB GUARDIANS/$100+$05 ; Page containing the sprite graphic data: B0
   DEFB $70                ; Minimum pixel y-coordinate: 56
   DEFB $B0                ; Maximum pixel y-coordinate: 88
 ; The following entity definition (0x53) is used in The Attic.
@@ -4890,7 +4890,7 @@ ENTITY83:
   DEFB $8C                ; Initial pixel y-coordinate: 70
   DEFB $04                ; Initial pixel y-coordinate increment: 2 (moving
                           ; down)
-  DEFB $B0                ; Page containing the sprite graphic data: B0
+  DEFB GUARDIANS/$100+$05 ; Page containing the sprite graphic data: B0
   DEFB $70                ; Minimum pixel y-coordinate: 56
   DEFB $B0                ; Maximum pixel y-coordinate: 88
 ; The following entity definition (0x54) is used in The Attic.
@@ -4906,7 +4906,7 @@ ENTITY84:
   DEFB $94                ; Initial pixel y-coordinate: 74
   DEFB $04                ; Initial pixel y-coordinate increment: 2 (moving
                           ; down)
-  DEFB $B0                ; Page containing the sprite graphic data: B0
+  DEFB GUARDIANS/$100+$05 ; Page containing the sprite graphic data: B0
   DEFB $70                ; Minimum pixel y-coordinate: 56
   DEFB $B0                ; Maximum pixel y-coordinate: 88
 ; The following entity definition (0x55) is used in The Attic.
@@ -4922,7 +4922,7 @@ ENTITY85:
   DEFB $9C                ; Initial pixel y-coordinate: 78
   DEFB $04                ; Initial pixel y-coordinate increment: 2 (moving
                           ; down)
-  DEFB $B0                ; Page containing the sprite graphic data: B0
+  DEFB GUARDIANS/$100+$05 ; Page containing the sprite graphic data: B0
   DEFB $70                ; Minimum pixel y-coordinate: 56
   DEFB $B0                ; Maximum pixel y-coordinate: 88
 ; The following entity definition (0x56) is used in The Attic.
@@ -4938,7 +4938,7 @@ ENTITY86:
   DEFB $A4                ; Initial pixel y-coordinate: 82
   DEFB $04                ; Initial pixel y-coordinate increment: 2 (moving
                           ; down)
-  DEFB $B0                ; Page containing the sprite graphic data: B0
+  DEFB GUARDIANS/$100+$05 ; Page containing the sprite graphic data: B0
   DEFB $70                ; Minimum pixel y-coordinate: 56
   DEFB $B0                ; Maximum pixel y-coordinate: 88
 ; The following entity definition (0x57) is used in The Attic.
@@ -4954,7 +4954,7 @@ ENTITY87:
   DEFB $AC                ; Initial pixel y-coordinate: 86
   DEFB $04                ; Initial pixel y-coordinate increment: 2 (moving
                           ; down)
-  DEFB $B0                ; Page containing the sprite graphic data: B0
+  DEFB GUARDIANS/$100+$05 ; Page containing the sprite graphic data: B0
   DEFB $70                ; Minimum pixel y-coordinate: 56
   DEFB $B0                ; Maximum pixel y-coordinate: 88
 ; The following entity definition (0x58) is used in Out on a limb and The
@@ -4970,7 +4970,7 @@ ENTITY88:
                           ; entity specification in the room definition)
   DEFB $A0                ; Pixel y-coordinate: 80
   DEFB $00                ; Unused
-  DEFB $B5                ; Page containing the sprite graphic data: B5
+  DEFB GUARDIANS/$100+$0A ; Page containing the sprite graphic data: B5
   DEFB $13                ; Minimum x-coordinate
   DEFB $1E                ; Maximum x-coordinate
 ; The following entity definition (0x59) is used in The Hall and West  Wing.
@@ -4986,7 +4986,7 @@ ENTITY89:
   DEFB $60                ; Initial pixel y-coordinate: 48
   DEFB $00                ; Initial pixel y-coordinate increment: 0 (not
                           ; moving)
-  DEFB $B0                ; Page containing the sprite graphic data: B0
+  DEFB GUARDIANS/$100+$05 ; Page containing the sprite graphic data: B0
   DEFB $50                ; Minimum pixel y-coordinate: 40
   DEFB $70                ; Maximum pixel y-coordinate: 56
 ; The following entity definition (0x5A) is used in To the Kitchens    Main
@@ -5002,7 +5002,7 @@ ENTITY90:
                           ; entity specification in the room definition)
   DEFB $30                ; Pixel y-coordinate: 24
   DEFB $00                ; Unused
-  DEFB $AE                ; Page containing the sprite graphic data: AE
+  DEFB GUARDIANS/$100+$03 ; Page containing the sprite graphic data: AE
   DEFB $00                ; Minimum x-coordinate
   DEFB $0B                ; Maximum x-coordinate
 ; The following entity definition (0x5B) is used in To the Kitchens    Main
@@ -5018,7 +5018,7 @@ ENTITY91:
                           ; entity specification in the room definition)
   DEFB $30                ; Pixel y-coordinate: 24
   DEFB $00                ; Unused
-  DEFB $BE                ; Page containing the sprite graphic data: BE
+  DEFB GUARDIANS/$100+$13 ; Page containing the sprite graphic data: BE
   DEFB $0D                ; Minimum x-coordinate
   DEFB $15                ; Maximum x-coordinate
 ; The following entity definition (0x5C) is used in To the Kitchens    Main
@@ -5034,7 +5034,7 @@ ENTITY92:
                           ; entity specification in the room definition)
   DEFB $60                ; Pixel y-coordinate: 48
   DEFB $00                ; Unused
-  DEFB $B7                ; Page containing the sprite graphic data: B7
+  DEFB GUARDIANS/$100+$0C ; Page containing the sprite graphic data: B7
   DEFB $0C                ; Minimum x-coordinate
   DEFB $18                ; Maximum x-coordinate
 ; The following entity definition (0x5D) is used in To the Kitchens    Main
@@ -5050,7 +5050,7 @@ ENTITY93:
                           ; entity specification in the room definition)
   DEFB $90                ; Pixel y-coordinate: 72
   DEFB $00                ; Unused
-  DEFB $B9                ; Page containing the sprite graphic data: B9
+  DEFB GUARDIANS/$100+$0E ; Page containing the sprite graphic data: B9
   DEFB $02                ; Minimum x-coordinate
   DEFB $06                ; Maximum x-coordinate
 ; The following entity definition (0x5E) is used in To the Kitchens    Main
@@ -5066,7 +5066,7 @@ ENTITY94:
                           ; entity specification in the room definition)
   DEFB $C0                ; Pixel y-coordinate: 96
   DEFB $00                ; Unused
-  DEFB $AF                ; Page containing the sprite graphic data: AF
+  DEFB GUARDIANS/$100+$04 ; Page containing the sprite graphic data: AF
   DEFB $00                ; Minimum x-coordinate
   DEFB $1E                ; Maximum x-coordinate
 ; The following entity definition (0x5F) is used in The Hall and To the
@@ -5082,7 +5082,7 @@ ENTITY95:
                           ; entity specification in the room definition)
   DEFB $A0                ; Pixel y-coordinate: 80
   DEFB $00                ; Unused
-  DEFB $BC                ; Page containing the sprite graphic data: BC
+  DEFB GUARDIANS/$100+$11 ; Page containing the sprite graphic data: BC
   DEFB $09                ; Minimum x-coordinate
   DEFB $11                ; Maximum x-coordinate
 ; The following entity definition (0x60) is used in East Wall Base.
@@ -5098,7 +5098,7 @@ ENTITY96:
   DEFB $90                ; Initial pixel y-coordinate: 72
   DEFB $FC                ; Initial pixel y-coordinate increment: -2 (moving
                           ; up)
-  DEFB $AC                ; Page containing the sprite graphic data: AC
+  DEFB GUARDIANS/$100+$01 ; Page containing the sprite graphic data: AC
   DEFB $00                ; Minimum pixel y-coordinate: 0
   DEFB $C0                ; Maximum pixel y-coordinate: 96
 ; The following entity definition (0x61) is used in Orangery and West  Wing.
@@ -5114,7 +5114,7 @@ ENTITY97:
   DEFB $40                ; Initial pixel y-coordinate: 32
   DEFB $08                ; Initial pixel y-coordinate increment: 4 (moving
                           ; down)
-  DEFB $AC                ; Page containing the sprite graphic data: AC
+  DEFB GUARDIANS/$100+$01 ; Page containing the sprite graphic data: AC
   DEFB $00                ; Minimum pixel y-coordinate: 0
   DEFB $C0                ; Maximum pixel y-coordinate: 96
 ; The following entity definition (0x62) is used in Tool  Shed.
@@ -5129,7 +5129,7 @@ ENTITY98:
                           ; entity specification in the room definition)
   DEFB $90                ; Pixel y-coordinate: 72
   DEFB $00                ; Unused
-  DEFB $AF                ; Page containing the sprite graphic data: AF
+  DEFB GUARDIANS/$100+$04 ; Page containing the sprite graphic data: AF
   DEFB $07                ; Minimum x-coordinate
   DEFB $14                ; Maximum x-coordinate
 ; The following entity definition (0x63) is used in Tool  Shed.
@@ -5144,7 +5144,7 @@ ENTITY99:
                           ; entity specification in the room definition)
   DEFB $60                ; Pixel y-coordinate: 48
   DEFB $00                ; Unused
-  DEFB $AD                ; Page containing the sprite graphic data: AD
+  DEFB GUARDIANS/$100+$02 ; Page containing the sprite graphic data: AD
   DEFB $07                ; Minimum x-coordinate
   DEFB $11                ; Maximum x-coordinate
 ; The following entity definition (0x64) is used in The Chapel and The Banyan
@@ -5161,7 +5161,7 @@ ENTITY100:
   DEFB $80                ; Initial pixel y-coordinate: 64
   DEFB $FE                ; Initial pixel y-coordinate increment: -1 (moving
                           ; up)
-  DEFB $AC                ; Page containing the sprite graphic data: AC
+  DEFB GUARDIANS/$100+$01 ; Page containing the sprite graphic data: AC
   DEFB $70                ; Minimum pixel y-coordinate: 56
   DEFB $A0                ; Maximum pixel y-coordinate: 80
 ; The following entity definition (0x65) is used in The Banyan Tree and A bit
@@ -5178,7 +5178,7 @@ ENTITY101:
   DEFB $60                ; Initial pixel y-coordinate: 48
   DEFB $04                ; Initial pixel y-coordinate increment: 2 (moving
                           ; down)
-  DEFB $AB                ; Page containing the sprite graphic data: AB
+  DEFB GUARDIANS/$100+$00 ; Page containing the sprite graphic data: AB
   DEFB $50                ; Minimum pixel y-coordinate: 40
   DEFB $A0                ; Maximum pixel y-coordinate: 80
 ; The following entity definition (0x66) is used in The Chapel and The Banyan
@@ -5195,7 +5195,7 @@ ENTITY102:
   DEFB $98                ; Initial pixel y-coordinate: 76
   DEFB $02                ; Initial pixel y-coordinate increment: 1 (moving
                           ; down)
-  DEFB $AB                ; Page containing the sprite graphic data: AB
+  DEFB GUARDIANS/$100+$00 ; Page containing the sprite graphic data: AB
   DEFB $50                ; Minimum pixel y-coordinate: 40
   DEFB $A0                ; Maximum pixel y-coordinate: 80
 ; The following entity definition (0x67) is used in The Chapel.
@@ -5210,7 +5210,7 @@ ENTITY103:
                           ; entity specification in the room definition)
   DEFB $C0                ; Pixel y-coordinate: 96
   DEFB $00                ; Unused
-  DEFB $B4                ; Page containing the sprite graphic data: B4
+  DEFB GUARDIANS/$100+$09 ; Page containing the sprite graphic data: B4
   DEFB $00                ; Minimum x-coordinate
   DEFB $0F                ; Maximum x-coordinate
 ; The following entity definition (0x68) is used in A bit of tree and Nomen
@@ -5226,7 +5226,7 @@ ENTITY104:
                           ; entity specification in the room definition)
   DEFB $20                ; Pixel y-coordinate: 16
   DEFB $00                ; Unused
-  DEFB $BC                ; Page containing the sprite graphic data: BC
+  DEFB GUARDIANS/$100+$11 ; Page containing the sprite graphic data: BC
   DEFB $00                ; Minimum x-coordinate
   DEFB $0A                ; Maximum x-coordinate
 ; The following entity definition (0x69) is used in The Bow.
@@ -5241,7 +5241,7 @@ ENTITY105:
                           ; entity specification in the room definition)
   DEFB $30                ; Pixel y-coordinate: 24
   DEFB $00                ; Unused
-  DEFB $BE                ; Page containing the sprite graphic data: BE
+  DEFB GUARDIANS/$100+$13 ; Page containing the sprite graphic data: BE
   DEFB $16                ; Minimum x-coordinate
   DEFB $1E                ; Maximum x-coordinate
 ; The following entity definition (0x6A) is used in Conservatory Roof.
@@ -5256,7 +5256,7 @@ ENTITY106:
                           ; entity specification in the room definition)
   DEFB $B0                ; Pixel y-coordinate: 88
   DEFB $00                ; Unused
-  DEFB $AE                ; Page containing the sprite graphic data: AE
+  DEFB GUARDIANS/$100+$03 ; Page containing the sprite graphic data: AE
   DEFB $11                ; Minimum x-coordinate
   DEFB $1E                ; Maximum x-coordinate
 ; The following entity definition (0x6B) is used in Nomen Luni.
@@ -5271,7 +5271,7 @@ ENTITY107:
                           ; entity specification in the room definition)
   DEFB $30                ; Pixel y-coordinate: 24
   DEFB $00                ; Unused
-  DEFB $BE                ; Page containing the sprite graphic data: BE
+  DEFB GUARDIANS/$100+$13 ; Page containing the sprite graphic data: BE
   DEFB $12                ; Minimum x-coordinate
   DEFB $16                ; Maximum x-coordinate
 ; The following entity definition (0x6C) is used in Watch Tower.
@@ -5286,7 +5286,7 @@ ENTITY108:
                           ; entity specification in the room definition)
   DEFB $90                ; Pixel y-coordinate: 72
   DEFB $00                ; Unused
-  DEFB $BB                ; Page containing the sprite graphic data: BB
+  DEFB GUARDIANS/$100+$10 ; Page containing the sprite graphic data: BB
   DEFB $0B                ; Minimum x-coordinate
   DEFB $12                ; Maximum x-coordinate
 ; The following entity definition (0x6D) is used in Watch Tower.
@@ -5301,7 +5301,7 @@ ENTITY109:
                           ; entity specification in the room definition)
   DEFB $70                ; Pixel y-coordinate: 56
   DEFB $00                ; Unused
-  DEFB $BC                ; Page containing the sprite graphic data: BC
+  DEFB GUARDIANS/$100+$11 ; Page containing the sprite graphic data: BC
   DEFB $09                ; Minimum x-coordinate
   DEFB $1E                ; Maximum x-coordinate
 ; The following entity definition (0x6E) is used in The Bow.
@@ -5316,7 +5316,7 @@ ENTITY110:
                           ; entity specification in the room definition)
   DEFB $D0                ; Pixel y-coordinate: 104
   DEFB $00                ; Unused
-  DEFB $AE                ; Page containing the sprite graphic data: AE
+  DEFB GUARDIANS/$100+$03 ; Page containing the sprite graphic data: AE
   DEFB $11                ; Minimum x-coordinate
   DEFB $1E                ; Maximum x-coordinate
 ; The following entity definition (0x6F) is used in Cuckoo's Nest.
@@ -5331,7 +5331,7 @@ ENTITY111:
                           ; entity specification in the room definition)
   DEFB $B0                ; Pixel y-coordinate: 88
   DEFB $00                ; Unused
-  DEFB $B5                ; Page containing the sprite graphic data: B5
+  DEFB GUARDIANS/$100+$0A ; Page containing the sprite graphic data: B5
   DEFB $00                ; Minimum x-coordinate
   DEFB $0B                ; Maximum x-coordinate
 ; The next 15 entity definitions (0x70-0x7E) are unused.
