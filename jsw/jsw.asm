@@ -3,6 +3,7 @@
 ;
 ; Copyright 1984 Software Projects Ltd (Jet Set Willy)
 ; Copyright 2012-2016 Richard Dymond (this disassembly)
+; Copyright 2016 Steve Taylor (local modifications to above)
 
   ORG $B000
 

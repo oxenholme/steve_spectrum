@@ -1,0 +1,3 @@
+Sinclair ZX Spectrum Related Things...
+
+See sub-directories for further description, copyright, licensing, etc.
