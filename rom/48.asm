@@ -12883,7 +12883,7 @@ L274C:  PUSH    DE              ; now stack this priority/operation
         LD      A,E             ; fetch the operation code
         AND     $3F             ; mask off the result/operand bits to leave
                                 ; a calculator literal.
-        LD      B,A             ; transfer to B register
+        LD      (BREG),A        ; transfer to BREG
 
 ; now use the calculator to perform the single operation - operand is on
 ; the calculator stack.
@@ -16992,15 +16992,6 @@ L335B:  CALL    L35BF           ; routine STK-PNTRS is called to set up the
 
 ; the calculate routine is called at this point by the series generator...
 
-;; GEN-ENT-1
-L335E:  LD      A,B             ; fetch the Z80 B register to A
-        LD      (BREG),A        ; and store value in system variable BREG.
-                                ; this will be the counter for dec-jr-nz
-                                ; or if used from fp-calc2 the calculator
-                                ; instruction.
-
-; ... and again later at this point
-
 ;; GEN-ENT-2
 L3362:  EXX                     ; switch sets
         EX      (SP),HL         ; and store the address of next instruction,
@@ -17081,10 +17072,6 @@ L338E:  LD      DE,L32D7        ; Address: tbl-addrs
         PUSH    DE              ; now address of routine
         EXX                     ; main set
                                 ; avoid using IY register.
-        LD      BC,(STKEND+1)   ; STKEND_hi
-                                ; nothing much goes to C but BREG to B
-                                ; and continue into next ret instruction
-                                ; which has a dual identity
 
 
 ; ------------------
@@ -17362,10 +17349,8 @@ L342D:  PUSH    HL              ; save the result pointer.
         LD      HL,(MEM)        ; fetch MEM the base of memory area.
         CALL    L3406           ; routine LOC-MEM sets HL to the destination.
         EX      DE,HL           ; swap - HL is start, DE is destination.
-        CALL    L33C0           ; routine MOVE-FP.
-                                ; note. a short ld bc,5; ldir
-                                ; the embedded memory check is not required
-                                ; so these instructions would be faster.
+        LD      BC,$0005        ; 5 bytes to move.
+        LDIR                    ; copy.
         EX      DE,HL           ; DE = STKEND
         POP     HL              ; restore original result pointer
         RET                     ; return.
@@ -17417,8 +17402,8 @@ L343E:  LD      A,(DE)          ; each byte of second
 ;   and Dr Frank O'Hara, published 1983 by Melbourne House.
 
 ;; series-xx
-L3449:  LD      B,A             ; parameter $00 - $1F to B counter
-        CALL    L335E           ; routine GEN-ENT-1 is called.
+L3449:  LD      (BREG),A        ; parameter $00 - $1F to BREG
+        CALL    L3362           ; routine GEN-ENT-2 is called.
                                 ; A recursive call to a special entry point
                                 ; in the calculator that puts the B register
                                 ; in the system variable BREG. The return
@@ -17947,7 +17932,7 @@ L352D:  EX      DE,HL           ; make HL point to the number.
 ;   for numbers and strings.
 
 ;; no-l-eql,etc.
-L353B:  LD      A,B             ; transfer literal to accumulator.
+L353B:  RRCA                    ; restore literal in accumulator.
         SUB     $08             ; subtract eight - which is not useful. 
 
         BIT     2,A             ; isolate '>', '<', '='.
@@ -18166,13 +18151,9 @@ L35B7:  POP     BC              ; now second length
 ;   the CALCULATE routine.
 
 ;; STK-PNTRS
-L35BF:  LD      HL,(STKEND)     ; fetch STKEND value from system variable.
-        LD      DE,$FFFB        ; the value -5
-        PUSH    HL              ; push STKEND value.
-
+L35BF:  LD      DE,(STKEND)     ; fetch STKEND value from system variable.
+        LD      HL,$FFFB        ; the value -5
         ADD     HL,DE           ; subtract 5 from HL.
-
-        POP     DE              ; pop STKEND to DE.
         RET                     ; return.
 
 ; -------------------
