@@ -6679,7 +6679,7 @@ L16E5:  CALL    L171E           ; routine STR-DATA fetches parameter
                                 ; data pointer to STRMS entry in HL.
 
         LD      BC,$0000        ; the stream is to be blanked.
-        LD      DE,$A3E2        ; the number of bytes from stream 4, $5C1E,
+        LD      DE,-(STRMS+$0E) ; the number of bytes from stream 4, $5C1E,
                                 ; to $10000
         EX      DE,HL           ; transfer offset to HL, STRMS data pointer
                                 ; to DE.
