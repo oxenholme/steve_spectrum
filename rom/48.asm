@@ -12048,39 +12048,6 @@ L24F9:  RST     08H             ; ERROR-1
 ; system is remarkably robust.
 
 
-; ---------------------------------
-; Scan expression or sub-expression
-; ---------------------------------
-;
-;
-
-;; SCANNING
-L24FB:  RST     18H             ; GET-CHAR
-        LD      B,$00           ; priority marker zero is pushed on stack
-                                ; to signify end of expression when it is
-                                ; popped off again.
-        PUSH    BC              ; put in on stack.
-                                ; and proceed to consider the first character
-                                ; of the expression.
-
-;; S-LOOP-1
-L24FF:  LD      C,A             ; store the character while a look up is done.
-        LD      HL,L2596        ; Address: scan-func
-        CALL    L16DC           ; routine INDEXER is called to see if it is
-                                ; part of a limited range '+', '(', 'ATTR' etc.
-
-        LD      A,C             ; fetch the character back
-        JP      NC,L2684        ; jump forward to S-ALPHNUM if not in primary
-                                ; operators and functions to consider in the
-                                ; first instance a digit or a variable and
-                                ; then anything else.                >>>
-
-        LD      B,$00           ; but here if it was found in table so
-        LD      C,(HL)          ; fetch offset from table and make B zero.
-        ADD     HL,BC           ; add the offset to position found
-        JP      (HL)            ; and jump to the routine e.g. S-BIN
-                                ; making an indirect exit from there.
-
 ; -------------------------------------------------------------------------
 ; The four service subroutines for routines in the scanning function table
 ; -------------------------------------------------------------------------
@@ -12606,9 +12573,36 @@ L267B:  CALL    L2522           ; routine S-2-COORD
         RST     20H             ; NEXT-CHAR
         JR      L26C3           ; forward to S-NUMERIC
 
-; -----------------------------
+; ---------------------------------
+; Scan expression or sub-expression
+; ---------------------------------
 
-; ==> The branch was here if not in table.
+;; SCANNING
+L24FB:  RST     18H             ; GET-CHAR
+        LD      B,$00           ; priority marker zero is pushed on stack
+                                ; to signify end of expression when it is
+                                ; popped off again.
+        PUSH    BC              ; put in on stack.
+                                ; and proceed to consider the first character
+                                ; of the expression.
+
+;; S-LOOP-1
+L24FF:  LD      C,A             ; store the character while a look up is done.
+        LD      HL,L2596        ; Address: scan-func
+        CALL    L16DC           ; routine INDEXER is called to see if it is
+                                ; part of a limited range '+', '(', 'ATTR' etc.
+
+        LD      A,C             ; fetch the character back
+        JP      NC,L2684        ; jump forward to S-ALPHNUM if not in primary
+                                ; operators and functions to consider in the
+                                ; first instance a digit or a variable and
+                                ; then anything else.                >>>
+
+        LD      B,$00           ; but here if it was found in table so
+        LD      C,(HL)          ; fetch offset from table and make B zero.
+        ADD     HL,BC           ; add the offset to position found
+        JP      (HL)            ; and jump to the routine e.g. S-BIN
+                                ; making an indirect exit from there.
 
 ;; S-ALPHNUM
 L2684:  CALL    L2C88           ; routine ALPHANUM checks if variable or
