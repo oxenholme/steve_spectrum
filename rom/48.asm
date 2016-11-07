@@ -12587,33 +12587,27 @@ L24FB:  RST     18H             ; GET-CHAR
                                 ; of the expression.
 
 ;; S-LOOP-1
-L24FF:  LD      C,A             ; store the character while a look up is done.
+L24FF:  CALL    L2C8D           ; routine ALPHA
+        JR      C,L26C9         ; forward to S-LETTER if alpha
+
+        CALL    L2D1B           ; routine NUMERIC
+        JR      NC,L268D        ; forward to S-DECIMAL if numeric
+
+        LD      C,A             ; store the character while a look up is done.
         LD      HL,L2596        ; Address: scan-func
         CALL    L16DC           ; routine INDEXER is called to see if it is
                                 ; part of a limited range '+', '(', 'ATTR' etc.
 
         LD      A,C             ; fetch the character back
-        JP      NC,L2684        ; jump forward to S-ALPHNUM if not in primary
-                                ; operators and functions to consider in the
-                                ; first instance a digit or a variable and
-                                ; then anything else.                >>>
+        JP      NC,L26DF        ; jump forward to S-NEGATE if not in primary
+                                ; operators and functions to consider a '-'
+                                ; then functions.
 
         LD      B,$00           ; but here if it was found in table so
         LD      C,(HL)          ; fetch offset from table and make B zero.
         ADD     HL,BC           ; add the offset to position found
         JP      (HL)            ; and jump to the routine e.g. S-BIN
                                 ; making an indirect exit from there.
-
-;; S-ALPHNUM
-L2684:  CALL    L2C88           ; routine ALPHANUM checks if variable or
-                                ; a digit.
-        JR      NC,L26DF        ; forward to S-NEGATE if not to consider
-                                ; a '-' character then functions.
-
-        CP      $41             ; compare 'A'
-        JR      NC,L26C9        ; forward to S-LETTER if alpha       ->
-                                ; else must have been numeric so continue
-                                ; into that routine.
 
 ; This important routine is called during runtime and from LINE-SCAN
 ; when a BASIC line is checked for syntax. It is this routine that
@@ -12684,7 +12678,7 @@ L26C3:  SET     6,(IY+FLAGS-ERR_NR)
 ;
 
 ;; S-LETTER
-L26C9:  CALL    L28B2           ; routine LOOK-VARS
+L26C9:  CALL    L28B8           ; routine LOOK-VARS
 
         JP      C,L1C2E         ; jump back to REPORT-2 if variable not found
                                 ; 'Variable not found'
@@ -13350,13 +13344,14 @@ L28AB:  INC     HL              ; increase pointer
 ;
 
 ;; LOOK-VARS
-L28B2:  SET     6,(IY+FLAGS-ERR_NR)
-                                ; update FLAGS - presume numeric result
-
-        RST     18H             ; GET-CHAR
+L28B2:  RST     18H             ; GET-CHAR
         CALL    L2C8D           ; routine ALPHA tests for A-Za-z
         JP      NC,L1C8A        ; jump to REPORT-C if not.
                                 ; 'Nonsense in BASIC'
+
+;; LOOK-VARS-1
+L28B8:  SET     6,(IY+FLAGS-ERR_NR)
+                                ; update FLAGS - presume numeric result
 
         PUSH    HL              ; save pointer to first letter       ^1
         AND     $1F             ; mask lower bits, 1 - 26 decimal     000xxxxx
@@ -13377,7 +13372,6 @@ L28B2:  SET     6,(IY+FLAGS-ERR_NR)
         JR      NC,L28E3        ; forward to V-TEST-FN if just one character
 
 ; It is more than one character but re-test current character so that 6 reset
-; This loop renders the similar loop at V-PASS redundant.
 
 ;; V-CHAR
 L28D4:  CALL    L2C88           ; routine ALPHANUM
@@ -13500,11 +13494,10 @@ L2932:  SET     7,B             ; will signal not found
 ;; V-SYNTAX
 L2934:  POP     DE              ; discard the pointer to 2nd. character  v2
                                 ; in BASIC line/workspace.
-
         RST     18H             ; GET-CHAR gets character after variable name.
+        POP     HL              ; drop pointer to 1st prog char          v1
         CP      $28             ; is it '(' ?
-        JR      Z,L2943         ; forward to V-PASS
-                                ; Note. could go straight to V-END ?
+        JR      Z,L294B         ; forward to V-END
 
         SET     5,B             ; signal not an array
         JR      L294B           ; forward to V-END
@@ -13522,25 +13515,9 @@ L293E:  POP     DE              ; discard pointer to first var letter
 ;; V-FOUND-2
 L293F:  POP     DE              ; discard pointer to 2nd prog char       v2
         POP     DE              ; drop pointer to 1st prog char          v1
-        PUSH    HL              ; save pointer to last char in vars
-
-        RST     18H             ; GET-CHAR
-
-;; V-PASS
-L2943:  CALL    L2C88           ; routine ALPHANUM
-        JR      NC,L294B        ; forward to V-END if not
-
-; but it never will be as we advanced past long-named variables earlier.
-
-        RST     20H             ; NEXT-CHAR
-        JR      L2943           ; back to V-PASS
-
-; ---
 
 ;; V-END
-L294B:  POP     HL              ; pop the pointer to first character in
-                                ; BASIC line/workspace.
-        RL      B               ; rotate the B register left
+L294B:  RL      B               ; rotate the B register left
                                 ; bit 7 to carry
         BIT     6,B             ; test the array indicator bit.
         RET                     ; return
