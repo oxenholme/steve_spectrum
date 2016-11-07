@@ -9242,35 +9242,33 @@ L1DD8:  RST     08H             ; ERROR-1
 ; latter case, have had the step, possibly negative, added to the value.
 
 ;; NEXT-LOOP
-L1DDA:  RST     28H             ;; FP-CALC
+L1DDA:  LD      HL,(MEM)
+        LD      BC,$000B
+        ADD     HL,BC
+        BIT     7,(HL)          ; is step negative?
+        JR      NZ,L1DE2        ; forward to NEXT-1 if so
+
+        RST     28H             ;; FP-CALC
         DEFB    $E1             ;;get-mem-1        l.
         DEFB    $E0             ;;get-mem-0        l,v.
-        DEFB    $E2             ;;get-mem-2        l,v,s.
-        DEFB    $36             ;;less-0           l,v,(1/0) negative step ?
-        DEFB    $00             ;;jump-true        l,v.(1/0)
-
-        DEFB    $02             ;;to L1DE2, NEXT-1 if step negative
-
-        DEFB    $01             ;;exchange         v,l.
-
-;; NEXT-1
-L1DE2:  DEFB    $03             ;;subtract         l-v OR v-l.
-        DEFB    $37             ;;greater-0        (1/0)
-        DEFB    $00             ;;jump-true        .
-
-        DEFB    $04             ;;to L1DE9, NEXT-2 if no more iterations.
-
+        DEFB    $03             ;;subtract         l-v.
         DEFB    $38             ;;end-calc         .
 
-        AND     A               ; clear carry flag signalling another loop.
+        LD      (STKEND),HL
+        INC     HL
+        RL      (HL)
         RET                     ; return
 
-; ---
+;; NEXT-1
+L1DE2:  RST     28H             ;; FP-CALC
+        DEFB    $E0             ;;get-mem-0        v.
+        DEFB    $E1             ;;get-mem-1        v,l.
+        DEFB    $03             ;;subtract         v-l.
+        DEFB    $38             ;;end-calc         .
 
-;; NEXT-2
-L1DE9:  DEFB    $38             ;;end-calc         .
-
-        SCF                     ; set carry flag signalling looping exhausted.
+        LD      (STKEND),HL
+        INC     HL
+        RL      (HL)
         RET                     ; return
 
 
