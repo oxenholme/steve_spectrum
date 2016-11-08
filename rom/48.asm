@@ -9023,20 +9023,23 @@ L1D03:  CP      $CD             ; is there a 'STEP' ?
 L1D10:  CALL    L1BEE           ; routine CHECK-END
 
         RST     28H             ;; FP-CALC      v,l.
-        DEFB    $A1             ;;stk-one       v,l,1=s.
+        DEFB    $01             ;;exchange      l,v.
+        DEFB    $A1             ;;stk-one       l,v,1=s.
+        DEFB    $01             ;;exchange      l,s,v.
         DEFB    $38             ;;end-calc
 
+        JR      L1D1D
 
 ;; F-REORDER
-L1D16:  RST     28H             ;; FP-CALC       v,l,s.
-        DEFB    $C0             ;;st-mem-0       v,l,s.
-        DEFB    $02             ;;delete         v,l.
-        DEFB    $01             ;;exchange       l,v.
-        DEFB    $E0             ;;get-mem-0      l,v,s.
-        DEFB    $01             ;;exchange       l,s,v.
+L1D16:  RST     28H             ;; FP-CALC      v,l,s.
+        DEFB    $C0             ;;st-mem-0      v,l,s.
+        DEFB    $02             ;;delete        v,l.
+        DEFB    $01             ;;exchange      l,v.
+        DEFB    $E0             ;;get-mem-0     l,v,s.
+        DEFB    $01             ;;exchange      l,s,v.
         DEFB    $38             ;;end-calc
 
-        CALL    L2AFF           ; routine LET assigns the initial value v to
+L1D1D:  CALL    L2AFF           ; routine LET assigns the initial value v to
                                 ; the variable altering type if necessary.
         LD      (MEM),HL        ; The system variable MEM is made to point to
                                 ; the variable instead of its normal
@@ -9246,27 +9249,33 @@ L1DDA:  LD      HL,(MEM)
         LD      BC,$000B
         ADD     HL,BC
         BIT     7,(HL)          ; is step negative?
+        LD      DE,(STKEND)
+        LD      HL,(MEM)
         JR      NZ,L1DE2        ; forward to NEXT-1 if so
 
-        RST     28H             ;; FP-CALC
-        DEFB    $E1             ;;get-mem-1        l.
-        DEFB    $E0             ;;get-mem-0        l,v.
-        DEFB    $03             ;;subtract         l-v.
-        DEFB    $38             ;;end-calc         .
-
-        LD      (STKEND),HL
+        LD      BC,$0005
+        ADD     HL,BC
+        LDIR
+        LD      HL,(MEM)
+        LD      BC,$0005
+        LDIR
+        LD      DE,(STKEND)
+        LD      HL,$0005
+        ADD     HL,DE
+        EX      DE,HL
+        CALL    L300F           ; subtract
         INC     HL
         RL      (HL)
         RET                     ; return
 
 ;; NEXT-1
-L1DE2:  RST     28H             ;; FP-CALC
-        DEFB    $E0             ;;get-mem-0        v.
-        DEFB    $E1             ;;get-mem-1        v,l.
-        DEFB    $03             ;;subtract         v-l.
-        DEFB    $38             ;;end-calc         .
-
-        LD      (STKEND),HL
+L1DE2:  DEC     BC
+        LDIR
+        LD      DE,(STKEND)
+        LD      HL,$0005
+        ADD     HL,DE
+        EX      DE,HL
+        CALL    L300F           ; subtract
         INC     HL
         RL      (HL)
         RET                     ; return
@@ -17416,11 +17425,9 @@ L3474:  LD      A,(HL)          ; load first byte and
         INC     HL              ; address the first byte of mantissa.
         LD      A,B             ; action flag $FF=abs, $00=neg.
         AND     $80             ; now         $80      $00
-        OR      (HL)            ; sets bit 7 for abs
-        RLA                     ; sets carry for abs and if number negative
-        CCF                     ; complement carry flag
-        RRA                     ; and rotate back in altering sign
-        LD      (HL),A          ; put the altered adjusted number back
+        OR      (HL)            ; flip sign for abs
+        XOR     $80             ; flip sign for either
+        LD      (HL),A          ; put the adjusted number back
         DEC     HL              ; HL points to result
         RET                     ; return with DE unchanged
 
